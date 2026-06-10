@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en" x-data="{ dark: localStorage.getItem('theme')==='dark'||(!localStorage.getItem('theme')&&window.matchMedia('(prefers-color-scheme: dark)').matches), scrolled:false, mobileMenu:false }" :class="{'dark':dark}" x-init="$watch('dark', v => localStorage.setItem('theme', v ? 'dark' : 'light')); window.addEventListener('scroll',()=>scrolled=window.scrollY>20,{passive:true})" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="description" content="JGTECH's blog — insights on web development, graphic design, mobile apps, and media production."/>
+  <meta name="author" content="JGTECH"/>
+  <title>Blog — JGTECH</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700&display=swap" rel="stylesheet"/>
+  <script>tailwind.config={darkMode:'class',theme:{extend:{fontFamily:{display:['Outfit','sans-serif'],body:['DM Sans','sans-serif']},colors:{accent:'#6366F1','accent-light':'#818CF8'}}}}</script>
+  <style>
+    *,*::before,*::after{box-sizing:border-box}
+    html{font-family:'DM Sans',sans-serif}
+    h1,h2,h3,h4,h5,h6{font-family:'Outfit',sans-serif}
+    .reveal{opacity:0;transform:translateY(26px);transition:opacity .6s cubic-bezier(.4,0,.2,1),transform .6s cubic-bezier(.4,0,.2,1)}
+    .reveal.visible{opacity:1;transform:translateY(0)}
+    .d1{transition-delay:.1s}.d2{transition-delay:.2s}.d3{transition-delay:.3s}
+    .nl{position:relative}
+    .nl::after{content:'';position:absolute;bottom:-2px;left:0;width:0;height:2px;background:currentColor;transition:width .25s cubic-bezier(.4,0,.2,1)}
+    .nl:hover::after{width:100%}
+    ::-webkit-scrollbar{width:5px}::-webkit-scrollbar-track{background:transparent}::-webkit-scrollbar-thumb{background:#6366F1;border-radius:99px}
+    body{transition:background-color .4s,color .4s}
+    body::before{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");pointer-events:none;z-index:0;opacity:.3}
+    .card-h{transition:all .35s cubic-bezier(.4,0,.2,1)}
+    .card-h:hover{transform:translateY(-8px);box-shadow:0 25px 50px -12px rgba(99,102,241,.15)}
+    .dark .card-h:hover{box-shadow:0 25px 50px -12px rgba(99,102,241,.25)}
+    .shimmer{position:relative;overflow:hidden}
+    .shimmer::after{content:'';position:absolute;top:0;left:-100%;width:60%;height:100%;background:rgba(255,255,255,.2);transform:skewX(-20deg);transition:left .5s cubic-bezier(.4,0,.2,1)}
+    .shimmer:hover::after{left:160%}
+    [x-cloak]{display:none!important}
+    .pf{overflow:hidden;background:#e4e4e7}
+    .pf img{width:100%;height:100%;object-fit:cover;display:block}
+    .gradient-text{background:linear-gradient(135deg,#6366F1,#A855F7,#EC4899);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+  </style>
+</head>
+<body class="bg-white dark:bg-zinc-950 text-zinc-900 dark:text-zinc-100 font-body antialiased">
+
+  <!-- NAV -->
+  <header class="fixed top-0 left-0 right-0 z-50 transition-all duration-300"
+    :class="scrolled?'bg-white/80 dark:bg-zinc-950/80 backdrop-blur-xl shadow-lg shadow-black/5 dark:shadow-black/20':'bg-transparent'">
+    <nav class="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
+      <a href="index.html" class="font-display font-bold text-xl tracking-tight z-10 flex items-center gap-2">
+        <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-accent to-purple-500 flex items-center justify-center">
+          <span class="text-white font-bold text-sm">JG</span>
+        </div>
+        <span class="text-zinc-900 dark:text-white">JG</span><span class="text-accent">TECH</span>
+      </a>
+      <ul class="hidden md:flex items-center gap-8 text-sm font-medium">
+        <li><a href="index.html#skills" class="nl text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white transition-colors">Skills</a></li>
+        <li><a href="projects.html" class="nl text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white transition-colors">Work</a></li>
+        <li><a href="index.html#about" class="nl text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white transition-colors">About</a></li>
+        <li><a href="blog.html" class="nl text-accent font-medium">Blog</a></li>
+        <li><a href="index.html#contact" class="nl text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white transition-colors">Contact</a></li>
+      </ul>
+      <div class="flex items-center gap-3">
+        <button @click="dark=!dark"
+          class="w-9 h-9 flex items-center justify-center rounded-full border border-zinc-200 dark:border-zinc-700 hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors"
+          :aria-label="dark ? 'Light mode' : 'Dark mode'">
+          <svg x-show="!dark" xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg>
+          <svg x-show="dark" xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-yellow-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364-6.364l-.707.707M6.343 17.657l-.707.707M17.657 17.657l-.707-.707M6.343 6.343l-.707-.707M12 8a4 4 0 100 8 4 4 0 000-8z"/></svg>
+        </button>
+        <a href="index.html#contact" class="hidden md:inline-flex items-center gap-2 shimmer bg-gradient-to-r from-accent to-purple-500 text-white text-sm font-medium px-5 py-2 rounded-full hover:shadow-lg hover:shadow-accent/25 transition-all duration-300">Hire me →</a>
+        <button @click="mobileMenu=!mobileMenu" class="md:hidden w-9 h-9 flex items-center justify-center rounded-full border border-zinc-200 dark:border-zinc-700" aria-label="Toggle menu">
+          <svg x-show="!mobileMenu" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+          <svg x-show="mobileMenu" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+        </button>
+      </div>
+    </nav>
+    <div x-show="mobileMenu" x-cloak x-transition class="md:hidden bg-white/95 dark:bg-zinc-950/95 backdrop-blur-xl border-t border-zinc-100 dark:border-zinc-800">
+      <ul class="flex flex-col px-6 py-4 gap-4 text-sm font-medium">
+        <li><a href="index.html#skills" @click="mobileMenu=false" class="block text-zinc-700 dark:text-zinc-300">Skills</a></li>
+        <li><a href="projects.html" @click="mobileMenu=false" class="block text-zinc-700 dark:text-zinc-300">Work</a></li>
+        <li><a href="index.html#about" @click="mobileMenu=false" class="block text-zinc-700 dark:text-zinc-300">About</a></li>
+        <li><a href="blog.html" class="block text-accent font-medium">Blog</a></li>
+        <li><a href="index.html#contact" @click="mobileMenu=false" class="block text-zinc-700 dark:text-zinc-300">Contact</a></li>
+      </ul>
+    </div>
+  </header>
+
+  <main>
+    <!-- HERO BLOG -->
+    <section class="pt-36 pb-16 relative overflow-hidden">
+      <div class="absolute top-0 right-0 w-80 h-80 bg-accent/10 rounded-full blur-3xl pointer-events-none"></div>
+      <div class="max-w-6xl mx-auto px-6 relative z-10">
+        <p class="reveal text-xs font-medium text-accent tracking-widest uppercase mb-3">Writing</p>
+        <h1 class="reveal d1 font-display font-bold text-5xl md:text-6xl text-zinc-900 dark:text-white leading-tight mb-4">The Blog</h1>
+        <p class="reveal d2 text-lg text-zinc-500 dark:text-zinc-400 max-w-xl leading-relaxed">Insights on web development, graphic design, mobile apps, media production, and the realities of building digital solutions.</p>
+      </div>
+    </section>
+
+    <!-- FEATURED ARTICLE -->
+    <section class="pb-16">
+      <div class="max-w-6xl mx-auto px-6">
+        <a href="blog-article.html" class="reveal group block rounded-3xl overflow-hidden bg-zinc-50 dark:bg-zinc-900 border border-zinc-100 dark:border-zinc-800 hover:border-accent transition-colors">
+          <div class="grid md:grid-cols-2">
+            <div class="pf h-64 md:h-auto">
+              <img src="https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=900&q=80" alt="Featured article" loading="lazy"/>
+            </div>
+            <div class="p-8 md:p-12 flex flex-col justify-center">
+              <div class="flex items-center gap-3 mb-4">
+                <span class="text-xs bg-accent/10 text-accent px-2.5 py-1 rounded-full">Web Dev</span>
+                <span class="text-xs text-zinc-400">March 8, 2025 · 7 min read</span>
+              </div>
+              <h2 class="font-display font-bold text-2xl md:text-3xl text-zinc-900 dark:text-white mb-4 group-hover:text-accent transition-colors">Why Every Business Needs a Professional Website in 2025</h2>
+              <p class="text-zinc-500 dark:text-zinc-400 leading-relaxed mb-6">Your website is your digital storefront. Here's why having a professional online presence is non-negotiable for business growth in today's digital landscape.</p>
+              <span class="inline-flex items-center gap-1.5 text-sm font-medium text-accent nl">Read article →</span>
+            </div>
+          </div>
+        </a>
+      </div>
+    </section>
+
+    <!-- ALL ARTICLES GRID -->
+    <section class="pb-24">
+      <div class="max-w-6xl mx-auto px-6">
+        <div class="grid md:grid-cols-3 gap-6">
+
+          <article class="reveal d1 card-h group bg-white dark:bg-zinc-900 rounded-2xl overflow-hidden border border-zinc-100 dark:border-zinc-800 hover:border-accent">
+            <div class="pf w-full h-44">
+              <img src="https://images.unsplash.com/photo-1626785774625-ddcddc3445e9?w=700&q=80" alt="Design principles" loading="lazy"/>
+            </div>
+            <div class="p-6">
+              <div class="flex items-center gap-3 mb-3">
+                <span class="text-xs bg-purple-500/10 text-purple-600 dark:text-purple-400 px-2.5 py-1 rounded-full">Design</span>
+                <span class="text-xs text-zinc-400">Feb 21, 2025</span>
+              </div>
+              <a href="blog-article.html">
+                <h3 class="font-display font-bold text-lg text-zinc-900 dark:text-white mb-2 group-hover:text-accent transition-colors">5 Graphic Design Principles That Make or Break Your Brand</h3>
+              </a>
+              <p class="text-sm text-zinc-500 dark:text-zinc-400 leading-relaxed mb-4">The fundamental design principles that separate amateur designs from professional-quality brand materials.</p>
+              <a href="blog-article.html" class="inline-flex items-center gap-1.5 text-sm font-medium text-accent nl">Read more →</a>
+            </div>
+          </article>
+
+          <article class="reveal d2 card-h group bg-white dark:bg-zinc-900 rounded-2xl overflow-hidden border border-zinc-100 dark:border-zinc-800 hover:border-accent">
+            <div class="pf w-full h-44">
+              <img src="https://images.unsplash.com/photo-1574717024653-61fd2cf4d44d?w=700&q=80" alt="Live streaming" loading="lazy"/>
+            </div>
+            <div class="p-6">
+              <div class="flex items-center gap-3 mb-3">
+                <span class="text-xs bg-rose-500/10 text-rose-600 dark:text-rose-400 px-2.5 py-1 rounded-full">Media</span>
+                <span class="text-xs text-zinc-400">Jan 14, 2025</span>
+              </div>
+              <a href="blog-article.html">
+                <h3 class="font-display font-bold text-lg text-zinc-900 dark:text-white mb-2 group-hover:text-accent transition-colors">Setting Up Professional Live Streaming on a Budget</h3>
+              </a>
+              <p class="text-sm text-zinc-500 dark:text-zinc-400 leading-relaxed mb-4">A complete guide to broadcasting live events with professional quality without breaking the bank.</p>
+              <a href="blog-article.html" class="inline-flex items-center gap-1.5 text-sm font-medium text-accent nl">Read more →</a>
+            </div>
+          </article>
+
+          <article class="reveal d3 card-h group bg-white dark:bg-zinc-900 rounded-2xl overflow-hidden border border-zinc-100 dark:border-zinc-800 hover:border-accent">
+            <div class="pf w-full h-44">
+              <img src="https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?w=700&q=80" alt="Mobile apps" loading="lazy"/>
+            </div>
+            <div class="p-6">
+              <div class="flex items-center gap-3 mb-3">
+                <span class="text-xs bg-amber-500/10 text-amber-600 dark:text-amber-400 px-2.5 py-1 rounded-full">Mobile</span>
+                <span class="text-xs text-zinc-400">Dec 3, 2024</span>
+              </div>
+              <a href="blog-article.html">
+                <h3 class="font-display font-bold text-lg text-zinc-900 dark:text-white mb-2 group-hover:text-accent transition-colors">Building Your First Mobile App: A Beginner's Roadmap</h3>
+              </a>
+              <p class="text-sm text-zinc-500 dark:text-zinc-400 leading-relaxed mb-4">Everything you need to know before building your first mobile application — from planning to launch.</p>
+              <a href="blog-article.html" class="inline-flex items-center gap-1.5 text-sm font-medium text-accent nl">Read more →</a>
+            </div>
+          </article>
+
+          <article class="reveal d1 card-h group bg-white dark:bg-zinc-900 rounded-2xl overflow-hidden border border-zinc-100 dark:border-zinc-800 hover:border-accent">
+            <div class="pf w-full h-44">
+              <img src="https://images.unsplash.com/photo-1553867745-6e038d085e86?w=700&q=80" alt="Excel tips" loading="lazy"/>
+            </div>
+            <div class="p-6">
+              <div class="flex items-center gap-3 mb-3">
+                <span class="text-xs bg-sky-500/10 text-sky-600 dark:text-sky-400 px-2.5 py-1 rounded-full">Productivity</span>
+                <span class="text-xs text-zinc-400">Nov 18, 2024</span>
+              </div>
+              <a href="blog-article.html">
+                <h3 class="font-display font-bold text-lg text-zinc-900 dark:text-white mb-2 group-hover:text-accent transition-colors">Advanced Excel Techniques Every Professional Should Know</h3>
+              </a>
+              <p class="text-sm text-zinc-500 dark:text-zinc-400 leading-relaxed mb-4">Power tips for data analysis, reporting, and presentation design that will transform your workflow.</p>
+              <a href="blog-article.html" class="inline-flex items-center gap-1.5 text-sm font-medium text-accent nl">Read more →</a>
+            </div>
+          </article>
+
+          <article class="reveal d2 card-h group bg-white dark:bg-zinc-900 rounded-2xl overflow-hidden border border-zinc-100 dark:border-zinc-800 hover:border-accent">
+            <div class="pf w-full h-44">
+              <img src="https://images.unsplash.com/photo-1551434678-e076c223a692?w=700&q=80" alt="Client management" loading="lazy"/>
+            </div>
+            <div class="p-6">
+              <div class="flex items-center gap-3 mb-3">
+                <span class="text-xs bg-accent/10 text-accent px-2.5 py-1 rounded-full">Business</span>
+                <span class="text-xs text-zinc-400">Oct 30, 2024</span>
+              </div>
+              <a href="blog-article.html">
+                <h3 class="font-display font-bold text-lg text-zinc-900 dark:text-white mb-2 group-hover:text-accent transition-colors">From Teacher to Tech Pro: My Journey in Digital Skills</h3>
+              </a>
+              <p class="text-sm text-zinc-500 dark:text-zinc-400 leading-relaxed mb-4">How I transitioned from education to building digital solutions — and the lessons learned along the way.</p>
+              <a href="blog-article.html" class="inline-flex items-center gap-1.5 text-sm font-medium text-accent nl">Read more →</a>
+            </div>
+          </article>
+
+          <article class="reveal d3 card-h group bg-white dark:bg-zinc-900 rounded-2xl overflow-hidden border border-zinc-100 dark:border-zinc-800 hover:border-accent">
+            <div class="pf w-full h-44">
+              <img src="https://images.unsplash.com/photo-1561070791-2526d30994b5?w=700&q=80" alt="Branding" loading="lazy"/>
+            </div>
+            <div class="p-6">
+              <div class="flex items-center gap-3 mb-3">
+                <span class="text-xs bg-purple-500/10 text-purple-600 dark:text-purple-400 px-2.5 py-1 rounded-full">Design</span>
+                <span class="text-xs text-zinc-400">Oct 5, 2024</span>
+              </div>
+              <a href="blog-article.html">
+                <h3 class="font-display font-bold text-lg text-zinc-900 dark:text-white mb-2 group-hover:text-accent transition-colors">Church Branding Done Right: A Complete Design Guide</h3>
+              </a>
+              <p class="text-sm text-zinc-500 dark:text-zinc-400 leading-relaxed mb-4">How to create cohesive visual identities for churches — from logos to social media templates and event materials.</p>
+              <a href="blog-article.html" class="inline-flex items-center gap-1.5 text-sm font-medium text-accent nl">Read more →</a>
+            </div>
+          </article>
+
+        </div>
+
+        <!-- Pagination -->
+        <nav class="reveal flex items-center justify-center gap-2 mt-14" aria-label="Pagination">
+          <span class="w-9 h-9 flex items-center justify-center rounded-full bg-gradient-to-r from-accent to-purple-500 text-white text-sm font-medium">1</span>
+          <a href="#" class="w-9 h-9 flex items-center justify-center rounded-full border border-zinc-200 dark:border-zinc-700 text-zinc-600 dark:text-zinc-400 hover:border-accent hover:text-accent transition-colors text-sm">2</a>
+          <a href="#" class="w-9 h-9 flex items-center justify-center rounded-full border border-zinc-200 dark:border-zinc-700 text-zinc-600 dark:text-zinc-400 hover:border-accent hover:text-accent transition-colors text-sm">3</a>
+        </nav>
+      </div>
+    </section>
+  </main>
+
+  <footer class="border-t border-zinc-100 dark:border-zinc-800">
+    <div class="max-w-6xl mx-auto px-6 py-8 flex flex-col sm:flex-row items-center justify-between gap-4">
+      <div class="flex items-center gap-2">
+        <div class="w-6 h-6 rounded-md bg-gradient-to-br from-accent to-purple-500 flex items-center justify-center">
+          <span class="text-white font-bold text-[10px]">JG</span>
+        </div>
+        <p class="text-sm text-zinc-400">© <span id="yr"></span> JGTECH. All rights reserved.</p>
+      </div>
+      <p class="text-xs text-zinc-500">Built with <a href="https://tailwindcss.com" class="hover:text-accent transition-colors">Tailwind CSS</a> & <a href="https://alpinejs.dev" class="hover:text-accent transition-colors">Alpine.js</a></p>
+    </div>
+  </footer>
+
+  <script>
+    document.getElementById('yr').textContent = new Date().getFullYear();
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(e => { if(e.isIntersecting){e.target.classList.add('visible');observer.unobserve(e.target);} });
+    },{threshold:.1,rootMargin:'0px 0px -40px 0px'});
+    document.querySelectorAll('.reveal').forEach(el=>observer.observe(el));
+  </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a09525fc3af60338',t:'MTc4MTA2MDY2Mw=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script><script defer src="https://static.cloudflareinsights.com/beacon.min.js/v833ccba57c9e4d2798f2e76cebdd09a11778172276447" integrity="sha512-57MDmcccJXYtNnH+ZiBwzC4jb2rvgVCEokYN+L/nLlmO8rfYT/gIpW2A569iJ/3b+0UEasghjuZH/ma3wIs/EQ==" data-cf-beacon='{"version":"2024.11.0","token":"1954b47c125f43f8b4338b3c4f804e4f","server_timing":{"name":{"cfCacheStatus":true,"cfEdge":true,"cfExtPri":true,"cfL4":true,"cfOrigin":true,"cfSpeedBrain":true},"location_startswith":null}}' crossorigin="anonymous"></script>
+</body>
+</html>
