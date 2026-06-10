@@ -697,11 +697,11 @@ background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/sv
           <p class="reveal d2 text-zinc-400 leading-relaxed mb-8">Whether you need a website, brand identity, mobile app, or live streaming setup — I'm here to help. Let's discuss your project and bring your vision to life.</p>
 
           <div class="reveal d3 flex flex-col gap-4">
-            <a href="/cdn-cgi/l/email-protection#0a606d7e6f69623d3c3c4a6d676b636624696567" class="group flex items-center gap-3 text-zinc-400 hover:text-white transition-colors">
+            <a href="/cdn-cgi/l/email-protection#650f021100060d525353250208040c094b060a08" class="group flex items-center gap-3 text-zinc-400 hover:text-white transition-colors">
               <span class="w-9 h-9 flex items-center justify-center bg-zinc-800 rounded-lg group-hover:bg-accent/20 transition-colors shrink-0">
                 <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
               </span>
-              <span class="text-sm"><span class="__cf_email__" data-cfemail="412b263524222976777701262c20282d6f222e2c">[email&#160;protected]</span></span>
+              <span class="text-sm"><span class="__cf_email__" data-cfemail="640e031001070c535252240309050d084a070b09">[email&#160;protected]</span></span>
             </a>
             <a href="https://instagram.com/jgtech200" rel="noopener noreferrer" target="_blank" class="group flex items-center gap-3 text-zinc-400 hover:text-white transition-colors">
               <span class="w-9 h-9 flex items-center justify-center bg-zinc-800 rounded-lg group-hover:bg-accent/20 transition-colors shrink-0">
@@ -718,8 +718,42 @@ background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/sv
           </div>
         </div>
 
-        <div class="reveal d2">
-          <form action="https://formsubmit.co/jgtech766@gmail.com" method="POST" novalidate>
+        <div class="reveal d2" x-data="{ sending: false, sent: false, error: false }">
+          <!-- SUCCESS MESSAGE -->
+          <div x-show="sent" x-transition class="text-center py-12">
+            <div class="w-16 h-16 mx-auto bg-emerald-500/20 rounded-full flex items-center justify-center mb-4">
+              <svg class="w-8 h-8 text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+            </div>
+            <h3 class="font-display font-bold text-xl text-white mb-2">Message Sent!</h3>
+            <p class="text-zinc-400 text-sm">Thank you for reaching out. I'll get back to you within 24 hours.</p>
+          </div>
+
+          <!-- ERROR MESSAGE -->
+          <div x-show="error" x-transition class="text-center py-12">
+            <div class="w-16 h-16 mx-auto bg-red-500/20 rounded-full flex items-center justify-center mb-4">
+              <svg class="w-8 h-8 text-red-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+            </div>
+            <h3 class="font-display font-bold text-xl text-white mb-2">Something went wrong</h3>
+            <p class="text-zinc-400 text-sm mb-4">Please try again or email me directly.</p>
+            <button @click="error = false" class="text-accent text-sm font-medium">← Try again</button>
+          </div>
+
+          <!-- CONTACT FORM -->
+          <form x-show="!sent && !error" @submit.prevent="
+            sending = true;
+            const form = $el;
+            const data = new FormData(form);
+            fetch('https://formsubmit.co/ajax/jgtech766@gmail.com', {
+              method: 'POST',
+              body: data
+            })
+            .then(res => {
+              sending = false;
+              if (res.ok) { sent = true; form.reset(); }
+              else { error = true; }
+            })
+            .catch(() => { sending = false; error = true; });
+          ">
             <input type="hidden" name="_subject" value="New Portfolio Contact Form Submission">
             <input type="hidden" name="_captcha" value="false">
             <input type="hidden" name="_template" value="table">
@@ -743,10 +777,10 @@ background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/sv
                   class="w-full bg-zinc-800/80 border border-zinc-700/50 text-white text-sm rounded-xl px-4 py-3 focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent/50 transition-all duration-300">
                   <option value="" class="bg-zinc-800">Select a service...</option>
                   <option value="Web Development" class="bg-zinc-800">Full-Stack Web Development</option>
-                  <option value="Graphic Design" class="bg-zinc-800">Graphic Design & Branding</option>
+                  <option value="Graphic Design" class="bg-zinc-800">Graphic Design &amp; Branding</option>
                   <option value="Mobile App" class="bg-zinc-800">Mobile App Development</option>
-                  <option value="Video Streaming" class="bg-zinc-800">Video Streaming & Media</option>
-                  <option value="Training" class="bg-zinc-800">Education & Training</option>
+                  <option value="Video Streaming" class="bg-zinc-800">Video Streaming &amp; Media</option>
+                  <option value="Training" class="bg-zinc-800">Education &amp; Training</option>
                   <option value="Other" class="bg-zinc-800">Other</option>
                 </select>
               </div>
@@ -755,8 +789,11 @@ background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/sv
                 <textarea id="fmessage" name="message" rows="4" placeholder="Tell me about your project..." required
                   class="w-full bg-zinc-800/80 border border-zinc-700/50 text-white text-sm rounded-xl px-4 py-3 placeholder-zinc-600 focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent/50 transition-all duration-300 resize-none"></textarea>
               </div>
-              <button type="submit" class="shimmer w-full bg-gradient-to-r from-accent to-purple-500 text-white font-display font-bold text-sm py-3.5 rounded-xl hover:shadow-lg hover:shadow-accent/25 transition-all duration-300">
-                Send message →
+              <button type="submit" :disabled="sending"
+                :class="sending ? 'opacity-60 cursor-not-allowed' : 'hover:shadow-lg hover:shadow-accent/25'"
+                class="shimmer w-full bg-gradient-to-r from-accent to-purple-500 text-white font-display font-bold text-sm py-3.5 rounded-xl transition-all duration-300 flex items-center justify-center gap-2">
+                <svg x-show="sending" class="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
+                <span x-text="sending ? 'Sending...' : 'Send message →'"></span>
               </button>
             </div>
           </form>
@@ -818,6 +855,5 @@ function app() {
 }
 </script>
 
-<script defer src="https://static.cloudflareinsights.com/beacon.min.js/v833ccba57c9e4d2798f2e76cebdd09a11778172276447" integrity="sha512-57MDmcccJXYtNnH+ZiBwzC4jb2rvgVCEokYN+L/nLlmO8rfYT/gIpW2A569iJ/3b+0UEasghjuZH/ma3wIs/EQ==" data-cf-beacon='{"version":"2024.11.0","token":"1954b47c125f43f8b4338b3c4f804e4f","server_timing":{"name":{"cfCacheStatus":true,"cfEdge":true,"cfExtPri":true,"cfL4":true,"cfOrigin":true,"cfSpeedBrain":true},"location_startswith":null}}' crossorigin="anonymous"></script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a095262169230338',t:'MTc4MTA2MDY2OQ=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a095567e9eb5933a',t:'MTc4MTA2MjY1MA=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
