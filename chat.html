@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="en" class="dark scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>JGTECH — Interactive AI ChatFolio &amp; Full-Stack Portfolio</title>
+  <meta name="description" content="Converse with JGTECH's personal AI agent to explore full-stack engineering projects, UI/UX systems, services, pricing, client testimonials, and direct WhatsApp contact.">
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="JGTECH — Interactive AI ChatFolio">
+  <meta property="og:description" content="Talk to JGTECH's AI assistant to explore custom web applications, skills, case studies, and pricing.">
+  <meta property="og:type" content="website">
+
+  <!-- Curated Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Montserrat:wght@400;500;600;700;800;900&family=Playfair+Display:ital,wght@0,600;0,700;1,400;1,600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <!-- Tailwind Play CDN for Utility Runtime -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              50: '#eef2ff',
+              100: '#e0e7ff',
+              500: '#6366f1',
+              600: '#4f46e5',
+              700: '#4338ca',
+            },
+            crimson: {
+              500: '#f43f5e',
+            },
+            obsidian: {
+              900: '#0e111a',
+              950: '#090a10',
+            }
+          },
+          fontFamily: {
+            display: ['Montserrat', 'sans-serif'],
+            body: ['Inter', 'sans-serif'],
+            serif: ['Playfair Display', 'Georgia', 'serif'],
+            mono: ['JetBrains Mono', 'monospace'],
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Core Stylesheet with ChatFolio Tokens -->
+  <link rel="stylesheet" href="styles.css">
+
+  <!-- Alpine.js & ChatFolio Engine -->
+  <script defer src="chatfolio.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+</head>
+
+<body x-data="chatfolioApp()" class="bg-[#fafafc] dark:bg-[#090a10] text-slate-800 dark:text-slate-100 antialiased selection:bg-brand-500 selection:text-white min-h-screen flex flex-col overflow-x-hidden">
+
+  <!-- Ambient Luxury Glow Lights -->
+  <div class="ambient-glow-indigo w-[600px] h-[600px] -top-32 -right-32 opacity-45 dark:opacity-35 pointer-events-none" aria-hidden="true"></div>
+  <div class="ambient-glow-crimson w-[550px] h-[550px] top-[40%] -left-40 opacity-35 dark:opacity-25 pointer-events-none" aria-hidden="true"></div>
+  <div class="ambient-glow-purple w-[600px] h-[600px] bottom-10 right-10 opacity-35 dark:opacity-20 pointer-events-none" aria-hidden="true"></div>
+
+  <!-- Outer Desktop Vertical Watermarks (Like ChatFolio) -->
+  <div class="vertical-watermark vertical-watermark-left" aria-hidden="true">
+    <span>JGTECH · Senior Full-Stack Developer</span>
+  </div>
+  <div class="vertical-watermark vertical-watermark-right" aria-hidden="true">
+    <span>Award-Winning Digital Experiences</span>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════════════════
+       STICKY TOP NAVIGATION BAR (Permanently Stuck & Frosted Glass)
+       ══════════════════════════════════════════════════════════════════ -->
+  <header class="fixed inset-x-0 top-0 z-50 glass-nav transition-all duration-300 py-3 sm:py-3.5 shadow-sm">
+    <nav class="max-w-6xl mx-auto px-6 flex items-center justify-between" aria-label="Main Navigation">
+
+      <!-- Stuck Brand Mark -->
+      <a href="index.html" class="group flex items-center gap-3 font-display text-xl font-bold tracking-tight text-slate-900 dark:text-white" aria-label="JGTECH Home">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-brand-600 via-purple-600 to-crimson-500 p-[1.5px] shadow-md shadow-brand-500/20 group-hover:scale-105 transition-transform duration-300 flex-shrink-0">
+          <div class="w-full h-full rounded-[10px] bg-white dark:bg-obsidian-950 flex items-center justify-center">
+            <span class="gradient-text font-extrabold text-sm tracking-wider">JG</span>
+          </div>
+        </div>
+        <div class="flex flex-col">
+          <span class="leading-none text-base tracking-tight font-extrabold">JG<span class="text-brand-500">TECH</span></span>
+          <span class="text-[10px] font-mono uppercase tracking-widest text-slate-500 dark:text-slate-400">Full-Stack &amp; Design</span>
+        </div>
+      </a>
+
+      <!-- Live AI Agent Indicator -->
+      <div class="hidden sm:inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/25 text-emerald-700 dark:text-emerald-400 text-xs font-semibold">
+        <span class="relative flex h-2 w-2">
+          <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+          <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+        </span>
+        <span class="font-mono text-[11px] uppercase tracking-wider">AI Co-Pilot Online</span>
+      </div>
+
+      <!-- Action Cluster -->
+      <div class="flex items-center gap-2.5">
+        <!-- Switch to Classic Portfolio View -->
+        <a href="index.html" class="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-display font-semibold border border-slate-200 dark:border-slate-800 bg-white/70 dark:bg-slate-900/70 hover:border-brand-500 text-slate-700 dark:text-slate-200 transition-all shadow-sm">
+          <span>Classic Portfolio</span>
+          <svg class="w-3.5 h-3.5 text-brand-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+        </a>
+
+        <!-- Theme Toggle Button -->
+        <button @click="toggleTheme()"
+          class="w-9 h-9 rounded-xl flex items-center justify-center border border-slate-200 dark:border-slate-800 bg-white/70 dark:bg-slate-900/70 text-slate-700 dark:text-slate-300 transition-all shadow-sm"
+          :aria-label="dark ? 'Switch to light mode' : 'Switch to dark mode'">
+          <svg x-show="!dark" xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-slate-700" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+          </svg>
+          <svg x-show="dark" xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-amber-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364-6.364l-.707.707M6.343 17.657l-.707.707M17.657 17.657l-.707-.707M6.343 6.343l-.707-.707M12 8a4 4 0 100 8 4 4 0 000-8z" />
+          </svg>
+        </button>
+      </div>
+
+    </nav>
+  </header>
+
+  <!-- ══════════════════════════════════════════════════════════════════
+       CHATFOLIO CORE INTERACTIVE WRAPPER
+       ══════════════════════════════════════════════════════════════════ -->
+  <main class="chatfolio-wrapper" id="chatfolio-wrapper">
+    <section class="chatfolio-container" id="chatfolio-container">
+      <div class="chatfolio-area-content">
+
+        <!-- ─────────────────────────────────────────────────────────────
+             1. INTRO SCREEN (Active Initially, Fades out upon prompt)
+             ───────────────────────────────────────────────────────────── -->
+        <div x-show="introVisible"
+             x-transition:leave="transition ease-in-out duration-300"
+             x-transition:leave-start="opacity-100 transform translate-y-0"
+             x-transition:leave-end="opacity-0 transform -translate-y-4"
+             class="chatfolio-intro">
+
+          <!-- Hello Badge -->
+          <div class="chatfolio-hello-pill">
+            <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+            <span>Interactive AI Portfolio</span>
+          </div>
+
+          <!-- Bold Headline -->
+          <h1 class="chatfolio-intro-title">
+            I'm <span class="gradient-text">JGTECH,</span>
+          </h1>
+          <h2 class="chatfolio-intro-subtitle">
+            Senior Full-Stack Developer &amp; UI/UX Designer
+          </h2>
+
+          <div class="chatfolio-intro-bottom">
+            <!-- Executive Client Endorsement Quote -->
+            <div class="chatfolio-intro-quote">
+              <p>"JGTECH is our secret weapon for modern digital systems. Transformed our complex operational challenges into high-performance, conversion-focused reality."</p>
+              <span>Rev. Emmanuel O. — Director of Academic Operations</span>
+            </div>
+
+            <!-- Authentic JGTECH Portrait with Glowing Halo Ring -->
+            <div class="chatfolio-avatar-container">
+              <div class="chatfolio-avatar-halo"></div>
+              <img src="photo.png" alt="JGTECH Studio Portrait" class="chatfolio-avatar-img">
+            </div>
+
+            <!-- Call-To-Action Option Chips -->
+            <div class="chatfolio-intro-options">
+              <button @click="triggerAction('about')" class="chatfolio-chip primary">
+                <svg class="w-4 h-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                <span>More About Me</span>
+              </button>
+
+              <button @click="triggerAction('projects')" class="chatfolio-chip">
+                <svg class="w-4 h-4 text-brand-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"/></svg>
+                <span>See My Work (6 Projects)</span>
+              </button>
+
+              <button @click="triggerAction('skills')" class="chatfolio-chip">
+                <svg class="w-4 h-4 text-purple-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"/></svg>
+                <span>Tech Stack &amp; Skills</span>
+              </button>
+
+              <button @click="triggerAction('whatsapp')" class="chatfolio-chip">
+                <svg class="w-4 h-4 text-emerald-500" fill="currentColor" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946C.06 5.348 5.397.01 12.008.01c3.202.001 6.212 1.246 8.477 3.513 2.266 2.268 3.507 5.28 3.505 8.484-.004 6.657-5.34 11.997-11.953 11.997-2.005-.001-3.973-.502-5.724-1.455L0 24zm6.59-4.846c1.665.989 3.3 1.472 5.358 1.473 5.514 0 10.002-4.489 10.006-10.004.002-2.672-1.039-5.186-2.93-7.079-1.892-1.893-4.407-2.934-7.08-2.936-5.521 0-10.012 4.492-10.017 10.008-.002 2.01.523 3.974 1.52 5.723l-.995 3.637 3.738-.98zm11.387-8.477c-.31-.156-1.834-.905-2.119-1.01-.285-.104-.493-.156-.701.156-.208.312-.806 1.01-1.01 1.243-.208.234-.416.26-.726.104-.309-.156-1.307-.481-2.49-1.537-.92-.821-1.54-1.835-1.72-2.147-.18-.312-.02-.481.136-.636.14-.139.31-.362.466-.543.156-.181.208-.312.312-.52.104-.208.052-.39-.026-.546-.078-.156-.701-1.688-.961-2.314-.253-.607-.512-.524-.701-.534-.18-.01-.39-.012-.6-.012-.208 0-.546.078-.832.39-.286.312-1.092 1.066-1.092 2.6s1.118 3.018 1.274 3.225c.156.208 2.2 3.36 5.33 4.717.744.322 1.325.515 1.78.659.749.238 1.43.205 1.97.124.6-.09 1.834-.749 2.094-1.47.26-.722.26-1.34.181-1.47-.078-.13-.286-.208-.596-.364z"/></svg>
+                <span>Direct WhatsApp</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- ─────────────────────────────────────────────────────────────
+             2. CONVERSATION STREAM (Chat Window)
+             ───────────────────────────────────────────────────────────── -->
+        <div x-show="!introVisible"
+             x-ref="chatWindow"
+             class="chatfolio-window">
+
+          <!-- Conversational Messages Loop -->
+          <template x-for="msg in messages" :key="msg.id">
+            <div class="chatfolio-msg" :class="msg.sender === 'user' ? 'user' : 'ai'">
+
+              <!-- AI Avatar Stamp on Left -->
+              <template x-if="msg.sender === 'ai'">
+                <div class="chatfolio-ai-avatar">
+                  <div class="chatfolio-ai-avatar-inner">JG</div>
+                </div>
+              </template>
+
+              <!-- Message Bubble Content -->
+              <div class="chatfolio-bubble">
+                <!-- If plain user text -->
+                <template x-if="msg.sender === 'user'">
+                  <p x-text="msg.text" class="leading-relaxed"></p>
+                </template>
+
+                <!-- If AI structured response -->
+                <template x-if="msg.sender === 'ai'">
+                  <div class="space-y-4">
+                    <!-- Heading -->
+                    <template x-if="msg.heading">
+                      <h3 class="font-display font-bold text-base sm:text-lg text-slate-900 dark:text-white" x-text="msg.heading"></h3>
+                    </template>
+
+                    <!-- Text description with simple bold rendering -->
+                    <p class="text-sm leading-relaxed text-slate-600 dark:text-slate-300" x-html="msg.text.replace(/\*\*(.*?)\*\*/g, '<strong class=\'text-slate-900 dark:text-white font-semibold\'>$1</strong>')"></p>
+
+                    <!-- Highlights bullets if about flow -->
+                    <template x-if="msg.highlights">
+                      <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5 pt-2">
+                        <template x-for="(hl, i) in msg.highlights" :key="i">
+                          <div class="flex items-start gap-2 text-xs text-slate-700 dark:text-slate-300 bg-slate-100 dark:bg-slate-800/60 p-2.5 rounded-xl border border-slate-200/60 dark:border-white/5">
+                            <span class="w-1.5 h-1.5 rounded-full bg-brand-500 mt-1.5 flex-shrink-0"></span>
+                            <span x-text="hl"></span>
+                          </div>
+                        </template>
+                      </div>
+                    </template>
+
+                    <!-- Skills Matrix if skills flow -->
+                    <template x-if="msg.categories">
+                      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
+                        <template x-for="(cat, cIdx) in msg.categories" :key="cIdx">
+                          <div class="p-3.5 rounded-2xl bg-slate-50 dark:bg-slate-800/50 border border-slate-200/80 dark:border-slate-700/60">
+                            <h4 class="font-display font-bold text-xs uppercase tracking-wider text-slate-900 dark:text-white mb-2.5 flex items-center gap-2" x-text="cat.title"></h4>
+                            <div class="space-y-2">
+                              <template x-for="(sk, sIdx) in cat.skills" :key="sIdx">
+                                <div>
+                                  <div class="flex justify-between text-xs mb-1">
+                                    <span class="font-medium text-slate-700 dark:text-slate-300" x-text="sk.name"></span>
+                                    <span class="font-mono text-brand-600 dark:text-brand-400 font-semibold" x-text="sk.level"></span>
+                                  </div>
+                                  <div class="w-full bg-slate-200 dark:bg-slate-700 rounded-full h-1.5 overflow-hidden">
+                                    <div class="bg-gradient-to-r from-brand-600 to-purple-600 h-1.5 rounded-full" :style="`width: ${sk.level}`"></div>
+                                  </div>
+                                </div>
+                              </template>
+                            </div>
+                          </div>
+                        </template>
+                      </div>
+                    </template>
+
+                    <!-- Project Card Component -->
+                    <template x-if="msg.project">
+                      <div class="chatfolio-project-card">
+                        <div class="chatfolio-project-media">
+                          <img :src="msg.project.image" :alt="msg.project.title" loading="lazy">
+                          <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent flex items-end p-4">
+                            <div>
+                              <span class="inline-block px-2.5 py-0.5 rounded-full bg-brand-500/80 backdrop-blur-md text-[10px] font-mono uppercase tracking-wider text-white font-semibold mb-1" x-text="msg.project.category"></span>
+                              <h4 class="font-display font-bold text-lg text-white" x-text="msg.project.title"></h4>
+                            </div>
+                          </div>
+                        </div>
+
+                        <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed" x-text="msg.project.summary"></p>
+
+                        <!-- Tech Badges -->
+                        <div class="flex flex-wrap gap-1.5">
+                          <template x-for="(t, ti) in msg.project.tech" :key="ti">
+                            <span class="px-2 py-0.5 rounded-md bg-slate-200/80 dark:bg-slate-800 text-[11px] font-mono text-slate-700 dark:text-slate-300" x-text="t"></span>
+                          </template>
+                        </div>
+
+                        <!-- Project Metrics Bar -->
+                        <div class="p-2.5 rounded-xl bg-slate-100 dark:bg-slate-800/80 border border-slate-200/60 dark:border-white/5 text-[11px] font-mono text-slate-600 dark:text-slate-300" x-text="msg.project.metrics"></div>
+
+                        <!-- Action Links -->
+                        <div class="flex flex-wrap items-center gap-2 pt-2 border-t border-slate-200 dark:border-slate-800">
+                          <a :href="msg.project.caseStudy" class="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-brand-600 hover:bg-brand-500 text-white font-display text-xs font-semibold shadow-sm transition-all">
+                            <span>Read Case Study</span> &rarr;
+                          </a>
+                          <a href="projects.html" class="inline-flex items-center gap-1 px-3.5 py-2 rounded-xl border border-slate-300 dark:border-slate-700 hover:border-brand-500 text-xs font-display font-medium text-slate-700 dark:text-slate-300 transition-all">
+                            <span>Catalog</span>
+                          </a>
+                        </div>
+                      </div>
+                    </template>
+
+                    <!-- Services & Pricing Cards -->
+                    <template x-if="msg.packages">
+                      <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">
+                        <template x-for="(pkg, pIdx) in msg.packages" :key="pIdx">
+                          <div class="p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200/80 dark:border-slate-700/60 flex flex-col justify-between">
+                            <div>
+                              <div class="flex justify-between items-start mb-1">
+                                <h4 class="font-display font-bold text-xs uppercase tracking-wider text-slate-900 dark:text-white" x-text="pkg.name"></h4>
+                                <span class="font-mono text-xs font-bold text-brand-600 dark:text-brand-400" x-text="pkg.price"></span>
+                              </div>
+                              <p class="text-[11px] font-mono text-slate-500 mb-2" x-text="pkg.duration"></p>
+                              <p class="text-xs text-slate-600 dark:text-slate-300 mb-3" x-text="pkg.summary"></p>
+                            </div>
+                            <ul class="text-[11px] space-y-1 text-slate-500 dark:text-slate-400">
+                              <template x-for="(feat, fIdx) in pkg.features" :key="fIdx">
+                                <li class="flex items-center gap-1.5">
+                                  <svg class="w-3 h-3 text-emerald-500 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+                                  <span x-text="feat"></span>
+                                </li>
+                              </template>
+                            </ul>
+                          </div>
+                        </template>
+                      </div>
+                    </template>
+
+                    <!-- Testimonials -->
+                    <template x-if="msg.testimonials">
+                      <div class="space-y-3 pt-2">
+                        <template x-for="(tm, tIdx) in msg.testimonials" :key="tIdx">
+                          <div class="p-3.5 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200/80 dark:border-slate-700/60">
+                            <p class="font-serif italic text-xs leading-relaxed text-slate-700 dark:text-slate-300 mb-2" x-text="`“${tm.quote}”`"></p>
+                            <div class="flex justify-between items-center text-[11px]">
+                              <div>
+                                <span class="font-display font-bold text-slate-900 dark:text-white" x-text="tm.author"></span>
+                                <span class="text-slate-500 dark:text-slate-400" x-text="` — ${tm.role}`"></span>
+                              </div>
+                              <span class="text-amber-500 font-bold">★★★★★</span>
+                            </div>
+                          </div>
+                        </template>
+                      </div>
+                    </template>
+
+                    <!-- Direct Contact Rows -->
+                    <template x-if="msg.contacts">
+                      <div class="space-y-2 pt-2">
+                        <template x-for="(cnt, cIdx) in msg.contacts" :key="cIdx">
+                          <div class="flex items-center justify-between p-3 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200/80 dark:border-slate-700/60">
+                            <span class="text-xs font-mono uppercase text-slate-500" x-text="cnt.label"></span>
+                            <div class="flex items-center gap-2">
+                              <span class="text-xs font-display font-bold text-slate-900 dark:text-white" x-text="cnt.value"></span>
+                              <template x-if="cnt.action === 'copy_email'">
+                                <button @click="copyEmailAddress()" class="px-2 py-0.5 rounded text-[10px] font-mono bg-brand-500/10 text-brand-600 dark:text-brand-400 hover:bg-brand-500 hover:text-white transition-colors">
+                                  <span x-text="copiedEmail ? 'Copied!' : 'Copy'"></span>
+                                </button>
+                              </template>
+                              <template x-if="cnt.url">
+                                <a :href="cnt.url" target="_blank" rel="noopener noreferrer" class="px-2 py-0.5 rounded text-[10px] font-mono bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 hover:bg-emerald-500 hover:text-white transition-colors">
+                                  Open ↗
+                                </a>
+                              </template>
+                            </div>
+                          </div>
+                        </template>
+                      </div>
+                    </template>
+
+                    <!-- Action Option Chips below Response -->
+                    <template x-if="msg.options && msg.options.length > 0">
+                      <div class="chatfolio-chips-wrapper">
+                        <template x-for="(opt, oIdx) in msg.options" :key="oIdx">
+                          <template x-if="opt.link">
+                            <a :href="opt.link" :target="opt.link.startsWith('http') ? '_blank' : '_self'" class="chatfolio-chip" :class="opt.primary ? 'primary' : ''" x-text="opt.label"></a>
+                          </template>
+                          <template x-if="!opt.link">
+                            <button @click="triggerAction(opt.action, opt.label)" class="chatfolio-chip" :class="opt.primary ? 'primary' : ''" x-text="opt.label"></button>
+                          </template>
+                        </template>
+                      </div>
+                    </template>
+
+                  </div>
+                </template>
+              </div>
+
+            </div>
+          </template>
+
+          <!-- Typing Indicator Animation -->
+          <div x-show="isTyping" class="chatfolio-msg ai">
+            <div class="chatfolio-ai-avatar">
+              <div class="chatfolio-ai-avatar-inner">JG</div>
+            </div>
+            <div class="chatfolio-typing-indicator">
+              <span class="chatfolio-typing-dot"></span>
+              <span class="chatfolio-typing-dot"></span>
+              <span class="chatfolio-typing-dot"></span>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- ─────────────────────────────────────────────────────────────
+             3. CHAT FOOTER & PROMPT INPUT DOCK
+             ───────────────────────────────────────────────────────────── -->
+        <footer class="chatfolio-footer-dock" id="chatfolio-footer">
+
+          <!-- Quick Navigation Drawer (Toggled via + button) -->
+          <div x-show="menuOpen"
+               x-transition:enter="transition ease-out duration-200"
+               x-transition:enter-start="opacity-0 transform translate-y-3"
+               x-transition:enter-end="opacity-100 transform translate-y-0"
+               x-transition:leave="transition ease-in duration-150"
+               x-transition:leave-start="opacity-100 transform translate-y-0"
+               x-transition:leave-end="opacity-0 transform translate-y-3"
+               @click.away="menuOpen = false"
+               class="chatfolio-nav-drawer">
+            <button @click="triggerAction('about')" class="chatfolio-chip">About JGTECH</button>
+            <button @click="triggerAction('skills')" class="chatfolio-chip">Tech Stack</button>
+            <button @click="triggerAction('projects')" class="chatfolio-chip primary">Projects &amp; Demos</button>
+            <button @click="triggerAction('services')" class="chatfolio-chip">Services &amp; Pricing</button>
+            <button @click="triggerAction('process')" class="chatfolio-chip">How I Work</button>
+            <button @click="triggerAction('reviews')" class="chatfolio-chip">Reviews</button>
+            <button @click="triggerAction('whatsapp')" class="chatfolio-chip text-emerald-600 dark:text-emerald-400">Direct WhatsApp</button>
+            <button @click="triggerAction('contact')" class="chatfolio-chip">Email &amp; Social</button>
+            <button @click="triggerAction('cv')" class="chatfolio-chip">Download CV</button>
+          </div>
+
+          <!-- Conversational Input Wrapper -->
+          <div class="chatfolio-input-wrapper">
+            <!-- (+) Menu Toggle Button -->
+            <button @click="menuOpen = !menuOpen"
+                    class="chatfolio-toggle-menu-btn"
+                    title="Explore Topics"
+                    :aria-expanded="menuOpen"
+                    aria-label="Toggle Topic Drawer">
+              <svg class="w-4 h-4 transition-transform duration-200" :class="menuOpen ? 'rotate-45' : ''" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
+              </svg>
+            </button>
+
+            <!-- Text Input Field -->
+            <input type="text"
+                   x-ref="chatInput"
+                   x-model="inputQuery"
+                   @keydown.enter.prevent="handleInputSubmit()"
+                   class="chatfolio-input-field"
+                   placeholder="Ask JGTECH anything... (try 'skills', 'pricing', 'projects', 'whatsapp')"
+                   aria-label="Ask JGTECH anything">
+
+            <!-- Send Button -->
+            <button @click="handleInputSubmit()"
+                    :disabled="!inputQuery.trim() || isTyping"
+                    class="chatfolio-send-btn"
+                    title="Send Prompt"
+                    aria-label="Send Prompt">
+              <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M5 10l7-7m0 0l7 7m-7-7v18" />
+              </svg>
+            </button>
+          </div>
+
+          <!-- Bottom Prompt Suggestion Ticker -->
+          <p class="chatfolio-footer-ticker">
+            <span>💡 Try asking: "What is your stack?" · "Show me your projects" · "How much do you charge?" · "WhatsApp"</span>
+          </p>
+
+        </footer>
+
+      </div>
+    </section>
+  </main>
+
+</body>
+</html>

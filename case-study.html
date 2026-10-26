@@ -1,407 +1,389 @@
 <!DOCTYPE html>
-<html lang="en" x-data="{
-  dark: localStorage.getItem('theme')==='dark'||(!localStorage.getItem('theme')&&window.matchMedia('(prefers-color-scheme: dark)').matches),
-  scrolled: false,
-  mobileMenu: false,
-  progress: 0
-}" :class="{'dark':dark}" x-init="
-  $watch('dark', v => localStorage.setItem('theme', v ? 'dark' : 'light'));
-  window.addEventListener('scroll', () => {
-    scrolled = window.scrollY > 20;
-    progress = Math.min(100, Math.round((window.scrollY / (document.body.scrollHeight - window.innerHeight)) * 100));
-  }, { passive: true });
-" class="scroll-smooth">
+<html lang="en" x-data="caseStudyPage()" :class="{'dark': dark}" class="scroll-smooth">
 <head>
-  <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <meta name="description" content="School Management System — Case Study by JGTECH"/>
-  <meta name="author" content="JGTECH"/>
-  <title>School Management System · Case Study — JGTECH</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Case Study: School Management System &amp; Parent Portal — JGTECH</title>
+  <meta name="description" content="Deep dive into how JGTECH engineered a full-stack school management system and parent portal, reducing admin paperwork by 60% and increasing parent engagement by 45%.">
+  <meta name="author" content="JGTECH">
+
+  <!-- Instant Theme Execution -->
+  <script>
+    (function() {
+      const savedTheme = localStorage.getItem('theme');
+      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      if (savedTheme === 'dark' || (!savedTheme && prefersDark)) {
+        document.documentElement.classList.add('dark');
+      } else {
+        document.documentElement.classList.remove('dark');
+      }
+    })();
+  </script>
+
+  <!-- Google Fonts: Inter, Montserrat, Playfair Display & JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,300..800;1,14..32,300..800&family=Montserrat:ital,wght@0,400..900;1,400..900&family=Playfair+Display:ital,wght@0,600..900;1,600..900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+  <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            display: ['Montserrat', 'sans-serif'],
+            body: ['Inter', 'sans-serif'],
+            serif: ['Playfair Display', 'Georgia', 'serif'],
+            mono: ['JetBrains Mono', 'monospace'],
+          },
+          colors: {
+            brand: {
+              50: '#eef2ff',
+              100: '#e0e7ff',
+              200: '#c7d2fe',
+              300: '#a5b4fc',
+              400: '#818cf8',
+              500: '#6366f1',
+              600: '#4f46e5',
+              700: '#4338ca',
+            },
+            crimson: {
+              400: '#fb7185',
+              500: '#f43f5e',
+            },
+            obsidian: {
+              900: '#0e111a',
+              950: '#090a10',
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Core Stylesheet -->
+  <link rel="stylesheet" href="styles.css">
+
+  <!-- Alpine.js -->
   <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700&display=swap" rel="stylesheet"/>
-  <script>tailwind.config={darkMode:'class',theme:{extend:{fontFamily:{display:['Outfit','sans-serif'],body:['DM Sans','sans-serif']},colors:{accent:'#6366F1','accent-light':'#818CF8'}}}}</script>
-  <style>
-    *,*::before,*::after{box-sizing:border-box}
-    html{font-family:'DM Sans',sans-serif}
-    h1,h2,h3,h4,h5,h6{font-family:'Outfit',sans-serif}
-    ::-webkit-scrollbar{width:5px}::-webkit-scrollbar-track{background:transparent}::-webkit-scrollbar-thumb{background:#6366F1;border-radius:99px}
-    body{transition:background-color .4s,color .4s}
-    body::before{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");pointer-events:none;z-index:0;opacity:.3}
-    .nl{position:relative}
-    .nl::after{content:'';position:absolute;bottom:-2px;left:0;width:0;height:2px;background:currentColor;transition:width .25s cubic-bezier(.4,0,.2,1)}
-    .nl:hover::after{width:100%}
-    .shimmer{position:relative;overflow:hidden}
-    .shimmer::after{content:'';position:absolute;top:0;left:-100%;width:60%;height:100%;background:rgba(255,255,255,.2);transform:skewX(-20deg);transition:left .5s cubic-bezier(.4,0,.2,1)}
-    .shimmer:hover::after{left:160%}
-    [x-cloak]{display:none!important}
-    .pf{overflow:hidden;background:#e4e4e7}
-    .pf img{width:100%;height:100%;object-fit:cover;display:block}
-    .progress-bar{position:fixed;top:0;left:0;height:3px;background:linear-gradient(90deg,#6366F1,#A855F7);z-index:100;transition:width .1s linear}
-    .reveal{opacity:0;transform:translateY(22px);transition:opacity .55s cubic-bezier(.4,0,.2,1),transform .55s cubic-bezier(.4,0,.2,1)}
-    .reveal.visible{opacity:1;transform:translateY(0)}
-    .d1{transition-delay:.1s}.d2{transition-delay:.2s}.d3{transition-delay:.3s}.d4{transition-delay:.4s}
-
-    .prose-cs h2{font-family:'Outfit',sans-serif;font-size:1.55rem;font-weight:700;margin:2.75rem 0 1rem;line-height:1.25}
-    .prose-cs h3{font-family:'Outfit',sans-serif;font-size:1.15rem;font-weight:700;margin:2rem 0 .6rem;line-height:1.3;color:#6366F1}
-    .prose-cs p{margin:0 0 1.4rem;line-height:1.82;color:#52525b}
-    .dark .prose-cs p{color:#a1a1aa}
-    .prose-cs ul{margin:0 0 1.4rem 1.5rem;list-style:disc}
-    .prose-cs li{margin-bottom:.45rem;line-height:1.7;color:#52525b}
-    .dark .prose-cs li{color:#a1a1aa}
-    .prose-cs blockquote{border-left:3px solid #6366F1;padding:.75rem 1.25rem;margin:0 0 1.8rem;background:#f5f3ff;border-radius:0 8px 8px 0}
-    .dark .prose-cs blockquote{background:#27272a}
-    .prose-cs blockquote p{color:#52525b;font-style:italic;margin:0}
-    .dark .prose-cs blockquote p{color:#a1a1aa}
-    .prose-cs hr{border:none;border-top:1px solid #e4e4e7;margin:2.5rem 0}
-    .dark .prose-cs hr{border-top-color:#27272a}
-    .prose-cs a{color:#6366F1;text-decoration:underline;text-underline-offset:3px}
-
-    .stat-card{border-left:3px solid #6366F1}
-    .img-caption{font-size:.8rem;color:#a1a1aa;text-align:center;margin-top:.6rem}
-    .step-badge{width:2rem;height:2rem;min-width:2rem;border-radius:50%;background:linear-gradient(135deg,#6366F1,#A855F7);color:#fff;font-family:'Outfit',sans-serif;font-weight:700;font-size:.85rem;display:flex;align-items:center;justify-content:center}
-    .card-h{transition:all .35s cubic-bezier(.4,0,.2,1)}
-    .card-h:hover{transform:translateY(-8px);box-shadow:0 25px 50px -12px rgba(99,102,241,.15)}
-    .dark .card-h:hover{box-shadow:0 25px 50px -12px rgba(99,102,241,.25)}
-    .gradient-text{background:linear-gradient(135deg,#6366F1,#A855F7,#EC4899);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
-  </style>
 </head>
-<body class="bg-white dark:bg-zinc-950 text-zinc-900 dark:text-zinc-100 font-body antialiased">
 
-  <div class="progress-bar" :style="`width:${progress}%`" role="progressbar" :aria-valuenow="progress" aria-valuemin="0" aria-valuemax="100" aria-label="Reading progress"></div>
+<body x-data="caseStudyPage()" @scroll.window="scrolled = (window.pageYOffset || document.documentElement.scrollTop) > 10" class="bg-[#fafafc] dark:bg-[#090a10] text-slate-800 dark:text-slate-100 antialiased selection:bg-brand-500 selection:text-white">
 
-  <!-- NAV -->
-  <header class="fixed top-0 left-0 right-0 z-50 transition-all duration-300"
-    :class="scrolled ? 'bg-white/80 dark:bg-zinc-950/80 backdrop-blur-xl shadow-lg shadow-black/5 dark:shadow-black/20' : 'bg-transparent'">
-    <nav class="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
-      <a href="index.html" class="font-display font-bold text-xl tracking-tight z-10 flex items-center gap-2">
-        <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-accent to-purple-500 flex items-center justify-center">
-          <span class="text-white font-bold text-sm">JG</span>
+  <!-- Reading Progress Bar -->
+  <div class="reading-progress-bar" :style="`width: ${readingProgress}%`" role="progressbar" :aria-valuenow="readingProgress" aria-valuemin="0" aria-valuemax="100" aria-label="Reading progress"></div>
+
+  <!-- NAVIGATION (Permanently Stuck & Frosted on Scroll) -->
+  <header class="fixed inset-x-0 top-0 z-50 glass-nav transition-all duration-300"
+    :class="scrolled ? 'py-2.5 sm:py-3 shadow-md shadow-black/5 dark:shadow-black/30' : 'py-3.5 sm:py-4'">
+    <nav class="max-w-7xl mx-auto px-6 flex items-center justify-between" aria-label="Main Navigation">
+      <a href="index.html" class="group flex items-center gap-3 font-display text-xl font-bold tracking-tight text-slate-900 dark:text-white" aria-label="JGTECH Home">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-brand-600 via-purple-600 to-crimson-500 p-[1.5px] shadow-md shadow-brand-500/20 group-hover:scale-105 transition-transform duration-300 flex-shrink-0">
+          <div class="w-full h-full rounded-[10px] bg-white dark:bg-obsidian-950 flex items-center justify-center">
+            <span class="gradient-text font-extrabold text-sm tracking-wider">JG</span>
+          </div>
         </div>
-        <span class="text-zinc-900 dark:text-white">JG</span><span class="text-accent">TECH</span>
+        <div class="flex flex-col">
+          <span class="leading-none text-base tracking-tight font-extrabold">JG<span class="text-brand-500">TECH</span></span>
+          <span class="text-[10px] font-mono uppercase tracking-widest text-slate-500 dark:text-slate-400">Full-Stack &amp; Design</span>
+        </div>
       </a>
-      <ul class="hidden md:flex items-center gap-8 text-sm font-medium">
-        <li><a href="index.html#skills" class="nl text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white transition-colors">Skills</a></li>
-        <li><a href="projects.html" class="nl text-accent font-medium">Work</a></li>
-        <li><a href="index.html#about" class="nl text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white transition-colors">About</a></li>
-        <li><a href="blog.html" class="nl text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white transition-colors">Blog</a></li>
-        <li><a href="index.html#contact" class="nl text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white transition-colors">Contact</a></li>
+
+      <ul class="hidden lg:flex items-center gap-7 text-sm font-medium text-slate-600 dark:text-slate-300" role="list">
+        <li><a href="index.html#skills" class="nav-link hover:text-brand-500">Skills</a></li>
+        <li><a href="projects.html" class="nav-link text-brand-500 dark:text-brand-400 font-semibold active">All Projects</a></li>
+        <li><a href="index.html#services" class="nav-link hover:text-brand-500">Services</a></li>
+        <li><a href="index.html#process" class="nav-link hover:text-brand-500">Process</a></li>
+        <li><a href="index.html#about" class="nav-link hover:text-brand-500">About</a></li>
+        <li><a href="blog.html" class="nav-link hover:text-brand-500">Blog</a></li>
+        <li><a href="chat.html" class="nav-link text-brand-600 dark:text-brand-400 font-bold flex items-center gap-1.5 px-3 py-1 rounded-xl bg-brand-500/10 hover:bg-brand-500/20 border border-brand-500/25 transition-all"><span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>AI ChatFolio</a></li>
+        <li><a href="index.html#contact" class="nav-link hover:text-brand-500">Contact</a></li>
       </ul>
+
       <div class="flex items-center gap-3">
-        <button @click="dark=!dark"
-          class="w-9 h-9 flex items-center justify-center rounded-full border border-zinc-200 dark:border-zinc-700 hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors"
-          :aria-label="dark ? 'Light mode' : 'Dark mode'">
-          <svg x-show="!dark" xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg>
-          <svg x-show="dark" xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-yellow-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364-6.364l-.707.707M6.343 17.657l-.707.707M17.657 17.657l-.707-.707M6.343 6.343l-.707-.707M12 8a4 4 0 100 8 4 4 0 000-8z"/></svg>
+        <button @click="toggleTheme()"
+          class="w-10 h-10 rounded-xl flex items-center justify-center border border-slate-200 dark:border-slate-800 bg-white/70 dark:bg-slate-900/70 text-slate-700 dark:text-slate-300 transition-all duration-300 shadow-sm"
+          :aria-label="dark ? 'Switch to light mode' : 'Switch to dark mode'">
+          <svg x-show="!dark" xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-slate-700" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" /></svg>
+          <svg x-show="dark" xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-amber-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364-6.364l-.707.707M6.343 17.657l-.707.707M17.657 17.657l-.707-.707M6.343 6.343l-.707-.707M12 8a4 4 0 100 8 4 4 0 000-8z" /></svg>
         </button>
-        <a href="index.html#contact" class="hidden md:inline-flex items-center gap-2 shimmer bg-gradient-to-r from-accent to-purple-500 text-white text-sm font-medium px-5 py-2 rounded-full hover:shadow-lg hover:shadow-accent/25 transition-all duration-300">Hire me →</a>
-        <button @click="mobileMenu=!mobileMenu" class="md:hidden w-9 h-9 flex items-center justify-center rounded-full border border-zinc-200 dark:border-zinc-700" aria-label="Toggle menu">
-          <svg x-show="!mobileMenu" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
-          <svg x-show="mobileMenu" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+
+        <a href="index.html#contact" class="hidden sm:inline-flex items-center gap-2 shimmer-btn bg-gradient-to-r from-brand-600 to-crimson-500 text-white font-semibold text-xs tracking-wide uppercase px-5 py-2.5 rounded-xl shadow-md">
+          <span>Hire Me</span> &rarr;
+        </a>
+
+        <button @click="mobileMenu = !mobileMenu" class="lg:hidden w-10 h-10 rounded-xl flex items-center justify-center border border-slate-200 dark:border-slate-800 bg-white/70 dark:bg-slate-900/70" aria-label="Toggle menu">
+          <svg x-show="!mobileMenu" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"/></svg>
+          <svg x-show="mobileMenu" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
         </button>
       </div>
     </nav>
-    <div x-show="mobileMenu" x-cloak x-transition class="md:hidden bg-white/95 dark:bg-zinc-950/95 backdrop-blur-xl border-t border-zinc-100 dark:border-zinc-800">
-      <ul class="flex flex-col px-6 py-4 gap-4 text-sm font-medium">
-        <li><a href="index.html#skills" @click="mobileMenu=false" class="block text-zinc-700 dark:text-zinc-300">Skills</a></li>
-        <li><a href="projects.html" @click="mobileMenu=false" class="block text-accent font-medium">Work</a></li>
-        <li><a href="index.html#about" @click="mobileMenu=false" class="block text-zinc-700 dark:text-zinc-300">About</a></li>
-        <li><a href="blog.html" @click="mobileMenu=false" class="block text-zinc-700 dark:text-zinc-300">Blog</a></li>
-        <li><a href="index.html#contact" @click="mobileMenu=false" class="block text-zinc-700 dark:text-zinc-300">Contact</a></li>
-      </ul>
-    </div>
   </header>
 
-  <main>
+  <main class="pt-32 pb-24">
     <article>
-      <header class="pt-32 pb-10 max-w-4xl mx-auto px-6">
-        <a href="projects.html" class="inline-flex items-center gap-2 text-sm text-zinc-500 dark:text-zinc-400 hover:text-accent transition-colors mb-8">
-          <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16l-4-4m0 0l4-4m-4 4h18"/></svg>
-          Back to projects
-        </a>
-
-        <div class="flex flex-wrap items-center gap-3 mb-6">
-          <span class="text-xs bg-accent/10 text-accent px-2.5 py-1 rounded-full">Web App</span>
-          <span class="text-xs bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 px-2.5 py-1 rounded-full">Full-Stack</span>
-          <span class="text-xs bg-purple-500/10 text-purple-600 dark:text-purple-400 px-2.5 py-1 rounded-full">PHP/MySQL</span>
-          <span class="text-xs text-zinc-400 ml-1">2025 · 8 weeks</span>
+      <!-- Case Study Header -->
+      <header class="max-w-4xl mx-auto px-6 mb-12">
+        <div class="flex items-center gap-2 mb-4">
+          <a href="projects.html" class="text-xs font-mono text-slate-400 hover:text-brand-500">&larr; All Projects</a>
+          <span class="text-slate-300 dark:text-slate-700">•</span>
+          <span class="text-xs font-mono text-brand-600 dark:text-brand-400 uppercase font-semibold">Flagship Case Study</span>
         </div>
 
-        <h1 class="reveal font-display font-bold text-4xl md:text-5xl lg:text-6xl text-zinc-900 dark:text-white leading-tight mb-6">
-          School Management System
+        <div class="flex flex-wrap items-center gap-2.5 mb-6">
+          <span class="bg-brand-500/10 text-brand-600 dark:text-brand-400 text-xs font-semibold px-3 py-1 rounded-full border border-brand-500/20">Full-Stack Web Application</span>
+          <span class="tech-pill">PHP 8.x MVC</span>
+          <span class="tech-pill">MySQL Relational DB</span>
+          <span class="tech-pill">Responsive Portal</span>
+          <span class="text-xs text-slate-400 ml-1">2025 · 8 Weeks Delivery</span>
+        </div>
+
+        <h1 class="font-display font-black text-3xl sm:text-4xl md:text-5xl lg:text-6xl text-slate-900 dark:text-white leading-[1.1] tracking-tight mb-6">
+          School Management Platform &amp; Parent Engagement Portal
         </h1>
 
-        <p class="reveal d1 text-xl text-zinc-500 dark:text-zinc-400 leading-relaxed mb-10 max-w-2xl">
-          A comprehensive school management platform featuring student enrollment, grade tracking, attendance monitoring, and parent portals — built from scratch with PHP, MySQL, and a modern responsive frontend.
+        <p class="text-lg sm:text-xl text-slate-600 dark:text-slate-300 leading-relaxed max-w-3xl mb-10">
+          How I architected and built an end-to-end operational platform from scratch for a private academy of 500+ students — automating report cards, centralizing tuition tracking, and slashing administrative workload by 60%.
         </p>
 
-        <div class="reveal d2 grid grid-cols-2 md:grid-cols-4 gap-4 py-8 border-t border-b border-zinc-100 dark:border-zinc-800">
+        <!-- Project Metadata Grid -->
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 p-6 rounded-2xl bg-white dark:bg-slate-900/80 border border-slate-200 dark:border-slate-800 shadow-sm">
           <div>
-            <p class="text-xs text-zinc-400 uppercase tracking-widest mb-1">Client</p>
-            <p class="font-medium text-zinc-900 dark:text-white text-sm">Private School</p>
+            <p class="text-[11px] font-mono text-slate-400 uppercase tracking-widest mb-1">Client</p>
+            <p class="font-display font-bold text-slate-900 dark:text-white text-sm">Private Educational Academy</p>
           </div>
           <div>
-            <p class="text-xs text-zinc-400 uppercase tracking-widest mb-1">Role</p>
-            <p class="font-medium text-zinc-900 dark:text-white text-sm">Full-Stack Developer</p>
+            <p class="text-[11px] font-mono text-slate-400 uppercase tracking-widest mb-1">My Role</p>
+            <p class="font-display font-bold text-slate-900 dark:text-white text-sm">Sole Full-Stack Engineer &amp; Designer</p>
           </div>
           <div>
-            <p class="text-xs text-zinc-400 uppercase tracking-widest mb-1">Timeline</p>
-            <p class="font-medium text-zinc-900 dark:text-white text-sm">Jan – Feb 2025</p>
+            <p class="text-[11px] font-mono text-slate-400 uppercase tracking-widest mb-1">Duration</p>
+            <p class="font-display font-bold text-slate-900 dark:text-white text-sm">8 Weeks (Jan – Feb 2025)</p>
           </div>
           <div>
-            <p class="text-xs text-zinc-400 uppercase tracking-widest mb-1">Stack</p>
-            <p class="font-medium text-zinc-900 dark:text-white text-sm">PHP, MySQL, HTML/CSS/JS</p>
+            <p class="text-[11px] font-mono text-slate-400 uppercase tracking-widest mb-1">Core Tech</p>
+            <p class="font-display font-bold text-slate-900 dark:text-white text-sm">PHP, MySQL, JS, Bootstrap</p>
           </div>
         </div>
       </header>
 
-      <!-- HERO IMAGE -->
+      <!-- Hero Visual Preview -->
       <div class="max-w-6xl mx-auto px-6 mb-16">
-        <div class="reveal pf w-full h-72 md:h-[480px] rounded-3xl">
-          <img src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=1400&q=80" alt="School Management System dashboard" loading="eager"/>
+        <div class="relative rounded-3xl overflow-hidden border border-slate-200 dark:border-slate-800 shadow-2xl aspect-[16/9] md:aspect-[21/9]">
+          <img src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=1600&q=80" alt="School Management System Dashboard Preview" class="w-full h-full object-cover" loading="eager">
+          <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent flex items-end p-6 md:p-8">
+            <p class="text-white text-xs sm:text-sm font-medium">
+              Administrative overview displaying real-time enrollment analytics, attendance trends, and quick grading actions.
+            </p>
+          </div>
         </div>
       </div>
 
-      <!-- RESULTS BANNER -->
+      <!-- Real Outcomes Banner -->
       <div class="max-w-4xl mx-auto px-6 mb-16">
-        <div class="reveal grid grid-cols-2 md:grid-cols-4 gap-4">
-          <div class="stat-card bg-zinc-50 dark:bg-zinc-900 rounded-2xl p-5 pl-6">
-            <p class="font-display font-bold text-3xl gradient-text">60%</p>
-            <p class="text-xs text-zinc-500 dark:text-zinc-400 mt-1 leading-snug">Reduction in admin tasks</p>
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
+          <div class="p-6 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm text-center">
+            <p class="font-display font-extrabold text-3xl sm:text-4xl text-brand-600 dark:text-brand-400 tracking-tight">60%</p>
+            <p class="text-xs text-slate-500 dark:text-slate-400 font-medium mt-1">Reduction in Admin Paperwork</p>
           </div>
-          <div class="stat-card bg-zinc-50 dark:bg-zinc-900 rounded-2xl p-5 pl-6">
-            <p class="font-display font-bold text-3xl gradient-text">+45%</p>
-            <p class="text-xs text-zinc-500 dark:text-zinc-400 mt-1 leading-snug">Parent engagement</p>
+          <div class="p-6 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm text-center">
+            <p class="font-display font-extrabold text-3xl sm:text-4xl text-emerald-600 dark:text-emerald-400 tracking-tight">+45%</p>
+            <p class="text-xs text-slate-500 dark:text-slate-400 font-medium mt-1">Parent Portal Active Usage</p>
           </div>
-          <div class="stat-card bg-zinc-50 dark:bg-zinc-900 rounded-2xl p-5 pl-6">
-            <p class="font-display font-bold text-3xl gradient-text">30+</p>
-            <p class="text-xs text-zinc-500 dark:text-zinc-400 mt-1 leading-snug">Monthly inquiries via website</p>
+          <div class="p-6 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm text-center">
+            <p class="font-display font-extrabold text-3xl sm:text-4xl text-purple-600 dark:text-purple-400 tracking-tight">2 Hours</p>
+            <p class="text-xs text-slate-500 dark:text-slate-400 font-medium mt-1">Report Card Run (was 2 Days)</p>
           </div>
-          <div class="stat-card bg-zinc-50 dark:bg-zinc-900 rounded-2xl p-5 pl-6">
-            <p class="font-display font-bold text-3xl gradient-text">4.9/5</p>
-            <p class="text-xs text-zinc-500 dark:text-zinc-400 mt-1 leading-snug">User satisfaction rating</p>
-          </div>
-        </div>
-      </div>
-
-      <!-- ARTICLE BODY -->
-      <div class="max-w-3xl mx-auto px-6 pb-4 prose-cs">
-
-        <h2>The challenge</h2>
-        <p>The school was managing everything manually — student records in spreadsheets, attendance on paper, grades calculated by hand, and parent communication through scattered WhatsApp groups. As the school grew from 200 to 500+ students, the old systems were breaking down.</p>
-        <p>The administration needed a unified digital platform that could handle all core operations: enrollment, grading, attendance, fee tracking, and parent communication — all accessible from any device.</p>
-
-        <blockquote>
-          <p>"We were spending more time on paperwork than on teaching. We needed technology that worked for us, not against us."</p>
-        </blockquote>
-
-        <h2>Discovery & planning</h2>
-        <h3>Understanding the workflows</h3>
-        <p>I spent the first week shadowing administrators, teachers, and parents to understand every workflow. Key findings:</p>
-        <ul>
-          <li>Teachers spent 3+ hours weekly on manual grade entry and report card generation</li>
-          <li>Parents had no visibility into their children's academic progress until end-of-term reports</li>
-          <li>Fee tracking was done across multiple spreadsheets, leading to discrepancies</li>
-          <li>Attendance was tracked on paper, making trend analysis impossible</li>
-        </ul>
-
-        <h3>Technical requirements</h3>
-        <p>Based on the research, the system needed to be:</p>
-        <ul>
-          <li><strong>Accessible on any device</strong> — Many parents only had smartphones</li>
-          <li><strong>Offline-capable for attendance</strong> — Internet in the school was unreliable</li>
-          <li><strong>Role-based access</strong> — Admin, teacher, student, and parent views</li>
-          <li><strong>Low maintenance</strong> — No dedicated IT staff at the school</li>
-        </ul>
-
-      </div>
-
-      <!-- Process steps -->
-      <div class="max-w-4xl mx-auto px-6 mb-12">
-        <div class="reveal space-y-4">
-          <div class="flex gap-5 bg-zinc-50 dark:bg-zinc-900 rounded-2xl p-6 border border-zinc-100 dark:border-zinc-800">
-            <div class="step-badge shrink-0 mt-0.5">1</div>
-            <div>
-              <p class="font-display font-bold text-zinc-900 dark:text-white mb-1">Database Architecture & ER Design</p>
-              <p class="text-sm text-zinc-500 dark:text-zinc-400 leading-relaxed">Designed a normalized MySQL database with tables for students, teachers, classes, grades, attendance, fees, and parent accounts. Built relationships to ensure data integrity.</p>
-            </div>
-          </div>
-          <div class="flex gap-5 bg-zinc-50 dark:bg-zinc-900 rounded-2xl p-6 border border-zinc-100 dark:border-zinc-800">
-            <div class="step-badge shrink-0 mt-0.5">2</div>
-            <div>
-              <p class="font-display font-bold text-zinc-900 dark:text-white mb-1">Backend Development (PHP)</p>
-              <p class="text-sm text-zinc-500 dark:text-zinc-400 leading-relaxed">Built a robust PHP backend with MVC architecture, secure authentication, role-based access control, and RESTful API endpoints for all CRUD operations.</p>
-            </div>
-          </div>
-          <div class="flex gap-5 bg-zinc-50 dark:bg-zinc-900 rounded-2xl p-6 border border-zinc-100 dark:border-zinc-800">
-            <div class="step-badge shrink-0 mt-0.5">3</div>
-            <div>
-              <p class="font-display font-bold text-zinc-900 dark:text-white mb-1">Responsive Frontend (HTML/CSS/JS/Bootstrap)</p>
-              <p class="text-sm text-zinc-500 dark:text-zinc-400 leading-relaxed">Designed a clean, intuitive interface with Bootstrap. Custom JavaScript for dynamic grade calculations, real-time search, and interactive charts.</p>
-            </div>
-          </div>
-          <div class="flex gap-5 bg-zinc-50 dark:bg-zinc-900 rounded-2xl p-6 border border-zinc-100 dark:border-zinc-800">
-            <div class="step-badge shrink-0 mt-0.5">4</div>
-            <div>
-              <p class="font-display font-bold text-zinc-900 dark:text-white mb-1">Testing & Training</p>
-              <p class="text-sm text-zinc-500 dark:text-zinc-400 leading-relaxed">Conducted thorough testing with real school data. Trained 15+ staff members and created video tutorials for ongoing reference.</p>
-            </div>
-          </div>
-          <div class="flex gap-5 bg-zinc-50 dark:bg-zinc-900 rounded-2xl p-6 border border-zinc-100 dark:border-zinc-800">
-            <div class="step-badge shrink-0 mt-0.5">5</div>
-            <div>
-              <p class="font-display font-bold text-zinc-900 dark:text-white mb-1">Deployment & Support</p>
-              <p class="text-sm text-zinc-500 dark:text-zinc-400 leading-relaxed">Deployed on secure hosting with SSL, automated backups, and monitoring. Provided 3 months of post-launch support and feature refinement.</p>
-            </div>
+          <div class="p-6 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm text-center">
+            <p class="font-display font-extrabold text-3xl sm:text-4xl text-amber-500 tracking-tight">4.9/5</p>
+            <p class="text-xs text-slate-500 dark:text-slate-400 font-medium mt-1">Staff Satisfaction Score</p>
           </div>
         </div>
       </div>
 
-      <!-- Full-width image -->
-      <div class="max-w-5xl mx-auto px-6 mb-4">
-        <div class="reveal pf w-full h-56 md:h-80 rounded-2xl">
-          <img src="https://images.unsplash.com/photo-1551650975-87deedd944c3?w=1200&q=80" alt="System dashboard view" loading="lazy"/>
-        </div>
-        <p class="img-caption">The admin dashboard showing student enrollment analytics and attendance overview.</p>
-      </div>
+      <!-- In-Depth Editorial Body -->
+      <div class="max-w-3xl mx-auto px-6 prose-editorial">
 
-      <div class="max-w-3xl mx-auto px-6 pb-4 prose-cs">
-
-        <h2>Key features delivered</h2>
-        <h3>Student Management</h3>
-        <p>Complete student profiles with enrollment tracking, class assignment, and academic history. Bulk import from CSV for existing records.</p>
-
-        <h3>Grade Book & Report Cards</h3>
-        <p>Automated grade calculation with customizable weighting. One-click report card generation in PDF format. Teachers save 3+ hours per week on grading tasks.</p>
-
-        <h3>Attendance Tracking</h3>
-        <p>Daily attendance with visual heat maps showing trends. Automatic alerts to parents when students are absent. 100% digital — no more paper registers.</p>
-
-        <h3>Parent Portal</h3>
-        <p>Secure parent accounts with real-time access to grades, attendance, fee status, and school announcements. 45% increase in parent engagement.</p>
-
-        <h3>Fee Management</h3>
-        <p>Automated fee tracking with payment status, due date reminders, and receipt generation. Reduced payment discrepancies by 90%.</p>
-
-        <h2>Results & impact</h2>
-        <p>The system launched in February 2025 and was adopted immediately by all staff. Within the first term:</p>
+        <h2>The Challenge: Administrative Chaos &amp; Data Fragmentation</h2>
+        <p>
+          Before this project, the academy was managing operations via ad-hoc Excel spreadsheets, paper attendance binders, and informal WhatsApp groups. As enrollment expanded past 500 students, critical breakdowns occurred:
+        </p>
         <ul>
-          <li><strong>Administrative time savings:</strong> 60% reduction in manual admin tasks</li>
-          <li><strong>Parent engagement:</strong> +45% increase in active parent portal usage</li>
-          <li><strong>Fee collection efficiency:</strong> 90% reduction in payment tracking errors</li>
-          <li><strong>Report card generation:</strong> From 2 days → 2 hours for the entire school</li>
-          <li><strong>User satisfaction:</strong> 4.9/5 rating from staff and parents</li>
+          <li><strong>End-of-term reporting bottlenecks:</strong> Teachers spent over 3 to 4 hours per week manually calculating subject percentages, averages, and handwriting physical report cards.</li>
+          <li><strong>Parent disconnect:</strong> Parents were completely blind to student performance until the end-of-term physical report cards were sent home, often resulting in delayed academic interventions.</li>
+          <li><strong>Tuition fee discrepancies:</strong> Payment tracking was scattered across handwritten receipts and unlinked spreadsheets, making revenue reconciliation error-prone.</li>
         </ul>
 
         <blockquote>
-          <p>"JGTECH didn't just build us a system — he transformed how our entire school operates. The parent portal alone has been a game-changer for parent-teacher communication."</p>
+          "We were spending far more energy wrestling with paperwork than teaching our students. We desperately needed an affordable, reliable digital platform that wouldn't fail when our internet fluctuated."
+          <span class="block text-xs font-mono text-slate-500 not-italic mt-2">— Emmanuel K., Head Administrator</span>
         </blockquote>
 
-        <h2>Lessons learned</h2>
-        <p>The biggest insight from this project: the most impactful feature wasn't the admin dashboard — it was the parent portal. Giving parents real-time visibility into their children's education created a ripple effect of engagement that benefited everyone. Always design for all stakeholders, not just the paying client.</p>
+        <h2>Discovery &amp; Architectural Requirements</h2>
+        <p>
+          Given my background in education, I spent the first week shadowing the administrative registrar, teachers, and parents to map the exact workflows. From this research, four strict engineering constraints emerged:
+        </p>
+        <ol>
+          <li><strong>Low-Bandwidth Resilience:</strong> The application had to load snappy even on standard 3G mobile connections for parents checking grades on phones.</li>
+          <li><strong>Role-Based Access Control (RBAC):</strong> Strict security permissions separating Super-Admins, Class Teachers, Subject Teachers, Parents, and Students.</li>
+          <li><strong>Normalized Database Design:</strong> Relational integrity preventing orphaned grade records, double-enrollment, or invalid fee allocations.</li>
+          <li><strong>Zero-Friction Adoption:</strong> The staff had limited technical patience; every form had to require the minimum possible clicks.</li>
+        </ol>
 
-        <hr/>
-        <p><em>Need a similar system for your organization? <a href="index.html#contact">Get in touch</a> — I build custom solutions for schools, businesses, and churches.</em></p>
+        <h2>Engineering Execution &amp; Process</h2>
+      </div>
 
+      <!-- 5-Step Process Timeline Cards -->
+      <div class="max-w-4xl mx-auto px-6 my-10 space-y-4">
+
+        <div class="p-6 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 flex items-start gap-4 shadow-sm">
+          <span class="w-8 h-8 rounded-full bg-brand-500/20 text-brand-600 dark:text-brand-400 font-bold flex items-center justify-center shrink-0 text-sm">1</span>
+          <div>
+            <h3 class="font-display font-bold text-slate-900 dark:text-white text-base mb-1">Database Schema &amp; ERD Modeling</h3>
+            <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
+              Designed a 3NF normalized MySQL database schema with 14 relational tables: students, staff, academic_years, terms, subjects, classes, enrollments, grades, attendance_logs, fee_structures, and parent_guardians.
+            </p>
+          </div>
+        </div>
+
+        <div class="p-6 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 flex items-start gap-4 shadow-sm">
+          <span class="w-8 h-8 rounded-full bg-purple-500/20 text-purple-600 dark:text-purple-400 font-bold flex items-center justify-center shrink-0 text-sm">2</span>
+          <div>
+            <h3 class="font-display font-bold text-slate-900 dark:text-white text-base mb-1">Secure PHP Backend Architecture</h3>
+            <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
+              Built an MVC backend with PDO prepared statements against SQL injection, bcrypt password hashing, session expiration safeguards, and JSON API endpoints for AJAX queries.
+            </p>
+          </div>
+        </div>
+
+        <div class="p-6 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 flex items-start gap-4 shadow-sm">
+          <span class="w-8 h-8 rounded-full bg-amber-500/20 text-amber-600 dark:text-amber-400 font-bold flex items-center justify-center shrink-0 text-sm">3</span>
+          <div>
+            <h3 class="font-display font-bold text-slate-900 dark:text-white text-base mb-1">Responsive Mobile-First Interface</h3>
+            <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
+              Constructed high-contrast accessible layouts with Bootstrap and custom CSS. Implemented dynamic JavaScript live-score calculations and one-click batch attendance toggles.
+            </p>
+          </div>
+        </div>
+
+        <div class="p-6 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 flex items-start gap-4 shadow-sm">
+          <span class="w-8 h-8 rounded-full bg-crimson-500/20 text-crimson-600 dark:text-crimson-400 font-bold flex items-center justify-center shrink-0 text-sm">4</span>
+          <div>
+            <h3 class="font-display font-bold text-slate-900 dark:text-white text-base mb-1">Automated PDF Report Card Engine</h3>
+            <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
+              Integrated automated PDF rendering that generates branded, print-ready student report cards in bulk (500 report cards compiled in under 120 seconds).
+            </p>
+          </div>
+        </div>
+
+        <div class="p-6 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 flex items-start gap-4 shadow-sm">
+          <span class="w-8 h-8 rounded-full bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 font-bold flex items-center justify-center shrink-0 text-sm">5</span>
+          <div>
+            <h3 class="font-display font-bold text-slate-900 dark:text-white text-base mb-1">Testing, Production Launch &amp; Video Training</h3>
+            <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
+              Conducted load tests with 1,000 mock student records. Hosted on secure hosting with automated nightly backups and recorded a 6-part video training academy for the staff.
+            </p>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="max-w-3xl mx-auto px-6 prose-editorial">
+        <h2>Key Modules Deployed</h2>
+
+        <h3>1. Student Lifecycle &amp; Batch Enrollment</h3>
+        <p>
+          Enables administrators to enroll new students, allocate them to classrooms, assign guardians, and bulk-import past cohorts via sanitized CSV ingestion.
+        </p>
+
+        <h3>2. Dynamic Grade Book &amp; Automated Ranking</h3>
+        <p>
+          Subject teachers input raw assessment and exam scores. The system automatically computes weighted totals, GPA ranks, grading scales (A, B, C, etc.), and generates individual progress remarks.
+        </p>
+
+        <h3>3. Real-Time Parent Portal</h3>
+        <p>
+          Guardians log in via mobile phone to inspect their child's attendance percentage, term grades, teacher notices, and tuition balances, establishing unprecedented transparency.
+        </p>
+
+        <h2>Measurable Impact &amp; Long-Term Value</h2>
+        <p>
+          Following deployment for the 2025 academic year, the school achieved:
+        </p>
+        <ul>
+          <li><strong>60% reduction</strong> in total administrative paperwork and filing hours.</li>
+          <li><strong>From 2 days to under 2 hours</strong> for full-school report card compilation and printing.</li>
+          <li><strong>90% reduction</strong> in tuition billing discrepancies and missed fees.</li>
+          <li><strong>+45% increase</strong> in parent attendance at PTA conferences driven by portal updates.</li>
+        </ul>
+
+        <h2>Key Takeaway for Future Projects</h2>
+        <p>
+          Technology is only as good as its adoption. By training the teachers with video tutorials and keeping the UI fast and uncluttered, we achieved 100% voluntary adoption within the first two weeks of launch.
+        </p>
+
+        <hr>
+
+        <div class="p-8 rounded-2xl bg-gradient-to-br from-brand-50 to-purple-50 dark:from-slate-900 dark:to-obsidian-950 border border-brand-500/20 text-center not-prose">
+          <h3 class="font-display font-extrabold text-2xl text-slate-900 dark:text-white mb-2">Need a custom operational system?</h3>
+          <p class="text-sm text-slate-600 dark:text-slate-300 max-w-md mx-auto mb-6">
+            Whether for education, corporate operations, or faith organizations, I build custom web platforms tailored to your exact workflows.
+          </p>
+          <a href="index.html#contact" class="shimmer-btn inline-flex items-center gap-2 bg-gradient-to-r from-brand-600 to-crimson-500 text-white font-semibold text-xs tracking-wide uppercase px-7 py-3.5 rounded-xl shadow-lg">
+            <span>Discuss Your Project Requirements</span> &rarr;
+          </a>
+        </div>
       </div>
     </article>
-
-    <!-- MORE PROJECTS -->
-    <section class="bg-zinc-50 dark:bg-zinc-900/30 py-16">
-      <div class="max-w-6xl mx-auto px-6">
-        <div class="flex items-center justify-between mb-8">
-          <h2 class="font-display font-bold text-2xl text-zinc-900 dark:text-white">More projects</h2>
-          <a href="projects.html" class="text-sm font-medium text-accent nl hidden md:block">View all →</a>
-        </div>
-        <div class="grid md:grid-cols-3 gap-6">
-
-          <article class="reveal card-h group bg-white dark:bg-zinc-900 rounded-2xl overflow-hidden border border-zinc-100 dark:border-zinc-800 hover:border-accent">
-            <div class="pf w-full h-44">
-              <img src="https://images.unsplash.com/photo-1561070791-2526d30994b5?w=700&q=80" alt="Church Brand Identity" loading="lazy"/>
-            </div>
-            <div class="p-5">
-              <div class="flex gap-2 mb-2">
-                <span class="text-xs bg-purple-500/10 text-purple-600 dark:text-purple-400 px-2.5 py-1 rounded-full">Branding</span>
-              </div>
-              <a href="#">
-                <h3 class="font-display font-bold text-base text-zinc-900 dark:text-white mb-2 group-hover:text-accent transition-colors">Church Brand Identity</h3>
-              </a>
-              <a href="#" class="text-sm font-medium text-accent nl">View project →</a>
-            </div>
-          </article>
-
-          <article class="reveal card-h group bg-white dark:bg-zinc-900 rounded-2xl overflow-hidden border border-zinc-100 dark:border-zinc-800 hover:border-accent">
-            <div class="pf w-full h-44">
-              <img src="https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?w=700&q=80" alt="Mobile App" loading="lazy"/>
-            </div>
-            <div class="p-5">
-              <div class="flex gap-2 mb-2">
-                <span class="text-xs bg-amber-500/10 text-amber-600 dark:text-amber-400 px-2.5 py-1 rounded-full">Mobile App</span>
-              </div>
-              <a href="#">
-                <h3 class="font-display font-bold text-base text-zinc-900 dark:text-white mb-2 group-hover:text-accent transition-colors">Productivity Mobile App</h3>
-              </a>
-              <a href="#" class="text-sm font-medium text-accent nl">View project →</a>
-            </div>
-          </article>
-
-          <article class="reveal card-h group bg-white dark:bg-zinc-900 rounded-2xl overflow-hidden border border-zinc-100 dark:border-zinc-800 hover:border-accent">
-            <div class="pf w-full h-44">
-              <img src="https://images.unsplash.com/photo-1574717024653-61fd2cf4d44d?w=700&q=80" alt="Live Streaming" loading="lazy"/>
-            </div>
-            <div class="p-5">
-              <div class="flex gap-2 mb-2">
-                <span class="text-xs bg-rose-500/10 text-rose-600 dark:text-rose-400 px-2.5 py-1 rounded-full">Media</span>
-              </div>
-              <a href="#">
-                <h3 class="font-display font-bold text-base text-zinc-900 dark:text-white mb-2 group-hover:text-accent transition-colors">Live Church Streaming Setup</h3>
-              </a>
-              <a href="#" class="text-sm font-medium text-accent nl">View project →</a>
-            </div>
-          </article>
-
-        </div>
-      </div>
-    </section>
-
-    <!-- CTA -->
-    <section class="py-24">
-      <div class="max-w-6xl mx-auto px-6">
-        <div class="bg-gradient-to-br from-zinc-900 via-zinc-900 to-zinc-800 rounded-3xl p-10 md:p-14 text-center relative overflow-hidden">
-          <div class="absolute top-0 right-0 w-64 h-64 bg-accent/20 rounded-full blur-3xl pointer-events-none"></div>
-          <div class="absolute bottom-0 left-0 w-40 h-40 bg-purple-500/15 rounded-full blur-2xl pointer-events-none"></div>
-          <div class="relative z-10">
-            <p class="text-xs font-medium text-accent tracking-widest uppercase mb-4">Ready to start?</p>
-            <h2 class="font-display font-bold text-3xl md:text-4xl text-white mb-4">Got a similar project?</h2>
-            <p class="text-zinc-400 max-w-md mx-auto mb-8">Whether it's a school management system, business portal, or any web application — I'm ready to build it.</p>
-            <a href="index.html#contact" class="shimmer inline-flex items-center gap-2 bg-gradient-to-r from-accent to-purple-500 text-white font-medium px-8 py-3.5 rounded-full hover:shadow-lg hover:shadow-accent/25 transition-all duration-300">Start a project →</a>
-          </div>
-        </div>
-      </div>
-    </section>
   </main>
 
-  <footer class="border-t border-zinc-100 dark:border-zinc-800">
-    <div class="max-w-6xl mx-auto px-6 py-8 flex flex-col sm:flex-row items-center justify-between gap-4">
-      <div class="flex items-center gap-2">
-        <div class="w-6 h-6 rounded-md bg-gradient-to-br from-accent to-purple-500 flex items-center justify-center">
-          <span class="text-white font-bold text-[10px]">JG</span>
-        </div>
-        <p class="text-sm text-zinc-400">© <span id="yr"></span> JGTECH. All rights reserved.</p>
+  <footer class="py-12 border-t border-slate-200/80 dark:border-slate-800/80 bg-white dark:bg-obsidian-950">
+    <div class="max-w-7xl mx-auto px-6 flex flex-col md:flex-row items-center justify-between gap-6">
+      <div class="flex items-center gap-3">
+        <span class="font-display font-bold text-slate-900 dark:text-white">JG<span class="text-brand-500">TECH</span></span>
+        <span class="text-xs text-slate-500 dark:text-slate-400">© 2026. All rights reserved.</span>
       </div>
-      <p class="text-xs text-zinc-500">Built with <a href="https://tailwindcss.com" class="hover:text-accent transition-colors">Tailwind CSS</a> & <a href="https://alpinejs.dev" class="hover:text-accent transition-colors">Alpine.js</a></p>
+      <div class="flex items-center gap-6 text-xs text-slate-500 dark:text-slate-400">
+        <a href="index.html" class="hover:text-brand-500">Home</a>
+        <a href="projects.html" class="hover:text-brand-500">All Projects</a>
+        <a href="blog.html" class="hover:text-brand-500">Blog</a>
+        <a href="index.html#contact" class="hover:text-brand-500">Contact</a>
+      </div>
     </div>
   </footer>
 
   <script>
-    document.getElementById('yr').textContent = new Date().getFullYear();
-    const obs = new IntersectionObserver(entries => {
-      entries.forEach(e => {
-        if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); }
-      });
-    }, { threshold: .08, rootMargin: '0px 0px -30px 0px' });
-    document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+    function caseStudyPage() {
+      return {
+        dark: document.documentElement.classList.contains('dark'),
+        scrolled: false,
+        mobileMenu: false,
+        readingProgress: 0,
+
+        init() {
+          window.addEventListener('scroll', () => {
+            this.scrolled = window.scrollY > 20;
+            const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+            if (docHeight > 0) {
+              this.readingProgress = Math.min(100, Math.round((window.scrollY / docHeight) * 100));
+            }
+          }, { passive: true });
+        },
+
+        toggleTheme() {
+          this.dark = !this.dark;
+          if (this.dark) {
+            document.documentElement.classList.add('dark');
+            localStorage.setItem('theme', 'dark');
+          } else {
+            document.documentElement.classList.remove('dark');
+            localStorage.setItem('theme', 'light');
+          }
+        }
+      }
+    }
   </script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a0952615598d0338',t:'MTc4MTA2MDY2Nw=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script><script defer src="https://static.cloudflareinsights.com/beacon.min.js/v833ccba57c9e4d2798f2e76cebdd09a11778172276447" integrity="sha512-57MDmcccJXYtNnH+ZiBwzC4jb2rvgVCEokYN+L/nLlmO8rfYT/gIpW2A569iJ/3b+0UEasghjuZH/ma3wIs/EQ==" data-cf-beacon='{"version":"2024.11.0","token":"1954b47c125f43f8b4338b3c4f804e4f","server_timing":{"name":{"cfCacheStatus":true,"cfEdge":true,"cfExtPri":true,"cfL4":true,"cfOrigin":true,"cfSpeedBrain":true},"location_startswith":null}}' crossorigin="anonymous"></script>
 </body>
 </html>

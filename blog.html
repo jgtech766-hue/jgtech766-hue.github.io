@@ -1,255 +1,349 @@
 <!DOCTYPE html>
-<html lang="en" x-data="{ dark: localStorage.getItem('theme')==='dark'||(!localStorage.getItem('theme')&&window.matchMedia('(prefers-color-scheme: dark)').matches), scrolled:false, mobileMenu:false }" :class="{'dark':dark}" x-init="$watch('dark', v => localStorage.setItem('theme', v ? 'dark' : 'light')); window.addEventListener('scroll',()=>scrolled=window.scrollY>20,{passive:true})" class="scroll-smooth">
+<html lang="en" x-data="blogPage()" :class="{'dark': dark}" class="scroll-smooth">
 <head>
-  <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <meta name="description" content="JGTECH's blog — insights on web development, graphic design, mobile apps, and media production."/>
-  <meta name="author" content="JGTECH"/>
-  <title>Blog — JGTECH</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700&display=swap" rel="stylesheet"/>
-  <script>tailwind.config={darkMode:'class',theme:{extend:{fontFamily:{display:['Outfit','sans-serif'],body:['DM Sans','sans-serif']},colors:{accent:'#6366F1','accent-light':'#818CF8'}}}}</script>
-  <style>
-    *,*::before,*::after{box-sizing:border-box}
-    html{font-family:'DM Sans',sans-serif}
-    h1,h2,h3,h4,h5,h6{font-family:'Outfit',sans-serif}
-    .reveal{opacity:0;transform:translateY(26px);transition:opacity .6s cubic-bezier(.4,0,.2,1),transform .6s cubic-bezier(.4,0,.2,1)}
-    .reveal.visible{opacity:1;transform:translateY(0)}
-    .d1{transition-delay:.1s}.d2{transition-delay:.2s}.d3{transition-delay:.3s}
-    .nl{position:relative}
-    .nl::after{content:'';position:absolute;bottom:-2px;left:0;width:0;height:2px;background:currentColor;transition:width .25s cubic-bezier(.4,0,.2,1)}
-    .nl:hover::after{width:100%}
-    ::-webkit-scrollbar{width:5px}::-webkit-scrollbar-track{background:transparent}::-webkit-scrollbar-thumb{background:#6366F1;border-radius:99px}
-    body{transition:background-color .4s,color .4s}
-    body::before{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");pointer-events:none;z-index:0;opacity:.3}
-    .card-h{transition:all .35s cubic-bezier(.4,0,.2,1)}
-    .card-h:hover{transform:translateY(-8px);box-shadow:0 25px 50px -12px rgba(99,102,241,.15)}
-    .dark .card-h:hover{box-shadow:0 25px 50px -12px rgba(99,102,241,.25)}
-    .shimmer{position:relative;overflow:hidden}
-    .shimmer::after{content:'';position:absolute;top:0;left:-100%;width:60%;height:100%;background:rgba(255,255,255,.2);transform:skewX(-20deg);transition:left .5s cubic-bezier(.4,0,.2,1)}
-    .shimmer:hover::after{left:160%}
-    [x-cloak]{display:none!important}
-    .pf{overflow:hidden;background:#e4e4e7}
-    .pf img{width:100%;height:100%;object-fit:cover;display:block}
-    .gradient-text{background:linear-gradient(135deg,#6366F1,#A855F7,#EC4899);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
-  </style>
-</head>
-<body class="bg-white dark:bg-zinc-950 text-zinc-900 dark:text-zinc-100 font-body antialiased">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Engineering &amp; Design Blog — JGTECH</title>
+  <meta name="description" content="Technical perspectives on full-stack web engineering, graphic design principles, mobile apps, and broadcast streaming by JGTECH.">
+  <meta name="author" content="JGTECH">
 
-  <!-- NAV -->
-  <header class="fixed top-0 left-0 right-0 z-50 transition-all duration-300"
-    :class="scrolled?'bg-white/80 dark:bg-zinc-950/80 backdrop-blur-xl shadow-lg shadow-black/5 dark:shadow-black/20':'bg-transparent'">
-    <nav class="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
-      <a href="index.html" class="font-display font-bold text-xl tracking-tight z-10 flex items-center gap-2">
-        <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-accent to-purple-500 flex items-center justify-center">
-          <span class="text-white font-bold text-sm">JG</span>
+  <!-- Instant Theme Execution -->
+  <script>
+    (function() {
+      const savedTheme = localStorage.getItem('theme');
+      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      if (savedTheme === 'dark' || (!savedTheme && prefersDark)) {
+        document.documentElement.classList.add('dark');
+      } else {
+        document.documentElement.classList.remove('dark');
+      }
+    })();
+  </script>
+
+  <!-- Google Fonts: Inter, Montserrat, Playfair Display & JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,300..800;1,14..32,300..800&family=Montserrat:ital,wght@0,400..900;1,400..900&family=Playfair+Display:ital,wght@0,600..900;1,600..900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            display: ['Montserrat', 'sans-serif'],
+            body: ['Inter', 'sans-serif'],
+            serif: ['Playfair Display', 'Georgia', 'serif'],
+            mono: ['JetBrains Mono', 'monospace'],
+          },
+          colors: {
+            brand: {
+              50: '#eef2ff',
+              100: '#e0e7ff',
+              200: '#c7d2fe',
+              300: '#a5b4fc',
+              400: '#818cf8',
+              500: '#6366f1',
+              600: '#4f46e5',
+              700: '#4338ca',
+            },
+            crimson: {
+              400: '#fb7185',
+              500: '#f43f5e',
+            },
+            obsidian: {
+              900: '#0e111a',
+              950: '#090a10',
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Core Stylesheet -->
+  <link rel="stylesheet" href="styles.css">
+
+  <!-- Alpine.js -->
+  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+</head>
+
+<body x-data="blogPage()" @scroll.window="scrolled = (window.pageYOffset || document.documentElement.scrollTop) > 10" class="bg-[#fafafc] dark:bg-[#090a10] text-slate-800 dark:text-slate-100 antialiased selection:bg-brand-500 selection:text-white">
+
+  <!-- Ambient Glows -->
+  <div class="ambient-glow-indigo w-96 h-96 -top-20 -right-20 opacity-40" aria-hidden="true"></div>
+  <div class="ambient-glow-crimson w-96 h-96 top-1/2 -left-20 opacity-30" aria-hidden="true"></div>
+
+  <!-- NAVIGATION (Permanently Stuck & Frosted on Scroll) -->
+  <header class="fixed inset-x-0 top-0 z-50 glass-nav transition-all duration-300"
+    :class="scrolled ? 'py-2.5 sm:py-3 shadow-md shadow-black/5 dark:shadow-black/30' : 'py-3.5 sm:py-4'">
+    <nav class="max-w-7xl mx-auto px-6 flex items-center justify-between" aria-label="Main Navigation">
+      <a href="index.html" class="group flex items-center gap-3 font-display text-xl font-bold tracking-tight text-slate-900 dark:text-white" aria-label="JGTECH Home">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-brand-600 via-purple-600 to-crimson-500 p-[1.5px] shadow-md shadow-brand-500/20 group-hover:scale-105 transition-transform duration-300 flex-shrink-0">
+          <div class="w-full h-full rounded-[10px] bg-white dark:bg-obsidian-950 flex items-center justify-center">
+            <span class="gradient-text font-extrabold text-sm tracking-wider">JG</span>
+          </div>
         </div>
-        <span class="text-zinc-900 dark:text-white">JG</span><span class="text-accent">TECH</span>
+        <div class="flex flex-col">
+          <span class="leading-none text-base tracking-tight font-extrabold">JG<span class="text-brand-500">TECH</span></span>
+          <span class="text-[10px] font-mono uppercase tracking-widest text-slate-500 dark:text-slate-400">Full-Stack &amp; Design</span>
+        </div>
       </a>
-      <ul class="hidden md:flex items-center gap-8 text-sm font-medium">
-        <li><a href="index.html#skills" class="nl text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white transition-colors">Skills</a></li>
-        <li><a href="projects.html" class="nl text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white transition-colors">Work</a></li>
-        <li><a href="index.html#about" class="nl text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white transition-colors">About</a></li>
-        <li><a href="blog.html" class="nl text-accent font-medium">Blog</a></li>
-        <li><a href="index.html#contact" class="nl text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white transition-colors">Contact</a></li>
+
+      <ul class="hidden lg:flex items-center gap-7 text-sm font-medium text-slate-600 dark:text-slate-300" role="list">
+        <li><a href="index.html#skills" class="nav-link hover:text-brand-500">Skills</a></li>
+        <li><a href="projects.html" class="nav-link hover:text-brand-500">All Projects</a></li>
+        <li><a href="index.html#services" class="nav-link hover:text-brand-500">Services</a></li>
+        <li><a href="index.html#process" class="nav-link hover:text-brand-500">Process</a></li>
+        <li><a href="index.html#about" class="nav-link hover:text-brand-500">About</a></li>
+        <li><a href="blog.html" class="nav-link text-brand-500 dark:text-brand-400 font-semibold active">Blog</a></li>
+        <li><a href="chat.html" class="nav-link text-brand-600 dark:text-brand-400 font-bold flex items-center gap-1.5 px-3 py-1 rounded-xl bg-brand-500/10 hover:bg-brand-500/20 border border-brand-500/25 transition-all"><span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>AI ChatFolio</a></li>
+        <li><a href="index.html#contact" class="nav-link hover:text-brand-500">Contact</a></li>
       </ul>
+
       <div class="flex items-center gap-3">
-        <button @click="dark=!dark"
-          class="w-9 h-9 flex items-center justify-center rounded-full border border-zinc-200 dark:border-zinc-700 hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors"
-          :aria-label="dark ? 'Light mode' : 'Dark mode'">
-          <svg x-show="!dark" xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg>
-          <svg x-show="dark" xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-yellow-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364-6.364l-.707.707M6.343 17.657l-.707.707M17.657 17.657l-.707-.707M6.343 6.343l-.707-.707M12 8a4 4 0 100 8 4 4 0 000-8z"/></svg>
+        <button @click="toggleTheme()"
+          class="w-10 h-10 rounded-xl flex items-center justify-center border border-slate-200 dark:border-slate-800 bg-white/70 dark:bg-slate-900/70 text-slate-700 dark:text-slate-300 transition-all duration-300 shadow-sm"
+          :aria-label="dark ? 'Switch to light mode' : 'Switch to dark mode'">
+          <svg x-show="!dark" xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-slate-700" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" /></svg>
+          <svg x-show="dark" xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-amber-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364-6.364l-.707.707M6.343 17.657l-.707.707M17.657 17.657l-.707-.707M6.343 6.343l-.707-.707M12 8a4 4 0 100 8 4 4 0 000-8z" /></svg>
         </button>
-        <a href="index.html#contact" class="hidden md:inline-flex items-center gap-2 shimmer bg-gradient-to-r from-accent to-purple-500 text-white text-sm font-medium px-5 py-2 rounded-full hover:shadow-lg hover:shadow-accent/25 transition-all duration-300">Hire me →</a>
-        <button @click="mobileMenu=!mobileMenu" class="md:hidden w-9 h-9 flex items-center justify-center rounded-full border border-zinc-200 dark:border-zinc-700" aria-label="Toggle menu">
-          <svg x-show="!mobileMenu" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
-          <svg x-show="mobileMenu" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+
+        <a href="index.html#contact" class="hidden sm:inline-flex items-center gap-2 shimmer-btn bg-gradient-to-r from-brand-600 to-crimson-500 text-white font-semibold text-xs tracking-wide uppercase px-5 py-2.5 rounded-xl shadow-md">
+          <span>Let's Talk</span> &rarr;
+        </a>
+
+        <button @click="mobileMenu = !mobileMenu" class="lg:hidden w-10 h-10 rounded-xl flex items-center justify-center border border-slate-200 dark:border-slate-800 bg-white/70 dark:bg-slate-900/70" aria-label="Toggle menu">
+          <svg x-show="!mobileMenu" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"/></svg>
+          <svg x-show="mobileMenu" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
         </button>
       </div>
     </nav>
-    <div x-show="mobileMenu" x-cloak x-transition class="md:hidden bg-white/95 dark:bg-zinc-950/95 backdrop-blur-xl border-t border-zinc-100 dark:border-zinc-800">
-      <ul class="flex flex-col px-6 py-4 gap-4 text-sm font-medium">
-        <li><a href="index.html#skills" @click="mobileMenu=false" class="block text-zinc-700 dark:text-zinc-300">Skills</a></li>
-        <li><a href="projects.html" @click="mobileMenu=false" class="block text-zinc-700 dark:text-zinc-300">Work</a></li>
-        <li><a href="index.html#about" @click="mobileMenu=false" class="block text-zinc-700 dark:text-zinc-300">About</a></li>
-        <li><a href="blog.html" class="block text-accent font-medium">Blog</a></li>
-        <li><a href="index.html#contact" @click="mobileMenu=false" class="block text-zinc-700 dark:text-zinc-300">Contact</a></li>
-      </ul>
-    </div>
   </header>
 
-  <main>
-    <!-- HERO BLOG -->
-    <section class="pt-36 pb-16 relative overflow-hidden">
-      <div class="absolute top-0 right-0 w-80 h-80 bg-accent/10 rounded-full blur-3xl pointer-events-none"></div>
-      <div class="max-w-6xl mx-auto px-6 relative z-10">
-        <p class="reveal text-xs font-medium text-accent tracking-widest uppercase mb-3">Writing</p>
-        <h1 class="reveal d1 font-display font-bold text-5xl md:text-6xl text-zinc-900 dark:text-white leading-tight mb-4">The Blog</h1>
-        <p class="reveal d2 text-lg text-zinc-500 dark:text-zinc-400 max-w-xl leading-relaxed">Insights on web development, graphic design, mobile apps, media production, and the realities of building digital solutions.</p>
+  <main class="pt-32 pb-24">
+    <!-- Blog Header -->
+    <section class="max-w-7xl mx-auto px-6 mb-12">
+      <div class="max-w-3xl">
+        <div class="flex items-center gap-2 mb-3">
+          <a href="index.html" class="text-xs font-mono text-slate-400 hover:text-brand-500">&larr; Home</a>
+          <span class="text-slate-300 dark:text-slate-700">•</span>
+          <span class="text-xs font-mono text-brand-600 dark:text-brand-400 uppercase font-semibold">Articles &amp; Practical Guides</span>
+        </div>
+        <h1 class="font-display font-black text-4xl sm:text-5xl md:text-6xl tracking-tight text-slate-900 dark:text-white mb-4">
+          Technical Writing &amp; <span class="gradient-text">Perspectives</span>
+        </h1>
+        <p class="text-slate-600 dark:text-slate-300 text-base sm:text-lg leading-relaxed">
+          Actionable writeups on full-stack architecture, brand strategy, mobile UX, and digital broadcasting. Written from hands-on client delivery experience.
+        </p>
       </div>
     </section>
 
-    <!-- FEATURED ARTICLE -->
-    <section class="pb-16">
-      <div class="max-w-6xl mx-auto px-6">
-        <a href="blog-article.html" class="reveal group block rounded-3xl overflow-hidden bg-zinc-50 dark:bg-zinc-900 border border-zinc-100 dark:border-zinc-800 hover:border-accent transition-colors">
-          <div class="grid md:grid-cols-2">
-            <div class="pf h-64 md:h-auto">
-              <img src="https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=900&q=80" alt="Featured article" loading="lazy"/>
-            </div>
-            <div class="p-8 md:p-12 flex flex-col justify-center">
-              <div class="flex items-center gap-3 mb-4">
-                <span class="text-xs bg-accent/10 text-accent px-2.5 py-1 rounded-full">Web Dev</span>
-                <span class="text-xs text-zinc-400">March 8, 2025 · 7 min read</span>
+    <!-- Featured Spotlight Article -->
+    <section class="max-w-7xl mx-auto px-6 mb-16">
+      <article class="glass-card overflow-hidden group border-2 border-brand-500/20 hover:border-brand-500 transition-all duration-300">
+        <a href="blog-article.html" class="grid lg:grid-cols-12">
+          <div class="lg:col-span-7 h-64 sm:h-80 lg:h-auto overflow-hidden bg-slate-200 dark:bg-slate-800">
+            <img src="https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=1200&q=80" alt="Featured Article Preview" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" loading="eager">
+          </div>
+          <div class="lg:col-span-5 p-8 sm:p-12 flex flex-col justify-between">
+            <div>
+              <div class="flex items-center gap-3 text-xs mb-4">
+                <span class="bg-brand-500/10 text-brand-600 dark:text-brand-400 px-3 py-1 rounded-full font-semibold border border-brand-500/20">Featured Article</span>
+                <span class="text-slate-400 font-mono">March 8, 2025 · 7 min read</span>
               </div>
-              <h2 class="font-display font-bold text-2xl md:text-3xl text-zinc-900 dark:text-white mb-4 group-hover:text-accent transition-colors">Why Every Business Needs a Professional Website in 2025</h2>
-              <p class="text-zinc-500 dark:text-zinc-400 leading-relaxed mb-6">Your website is your digital storefront. Here's why having a professional online presence is non-negotiable for business growth in today's digital landscape.</p>
-              <span class="inline-flex items-center gap-1.5 text-sm font-medium text-accent nl">Read article →</span>
+              <h2 class="font-display font-extrabold text-2xl sm:text-3xl text-slate-900 dark:text-white leading-tight mb-4 group-hover:text-brand-500 transition-colors">
+                Why Every Business Needs a Professional Website in 2025
+              </h2>
+              <p class="text-slate-600 dark:text-slate-300 text-sm leading-relaxed mb-6">
+                In an era where customers Google before they buy, operating without a custom website is forfeiting credibility. Discover the real conversion metrics and technology stack that drives growth.
+              </p>
+            </div>
+            <div class="flex items-center gap-3 pt-4 border-t border-slate-100 dark:border-slate-800">
+              <span class="text-xs font-bold text-brand-600 dark:text-brand-400 flex items-center gap-1.5 group-hover:translate-x-1 transition-transform">
+                <span>Read Full Analysis</span> &rarr;
+              </span>
             </div>
           </div>
         </a>
-      </div>
+      </article>
     </section>
 
-    <!-- ALL ARTICLES GRID -->
-    <section class="pb-24">
-      <div class="max-w-6xl mx-auto px-6">
-        <div class="grid md:grid-cols-3 gap-6">
+    <!-- Articles Grid -->
+    <section class="max-w-7xl mx-auto px-6">
+      <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-7">
 
-          <article class="reveal d1 card-h group bg-white dark:bg-zinc-900 rounded-2xl overflow-hidden border border-zinc-100 dark:border-zinc-800 hover:border-accent">
-            <div class="pf w-full h-44">
-              <img src="https://images.unsplash.com/photo-1626785774625-ddcddc3445e9?w=700&q=80" alt="Design principles" loading="lazy"/>
+        <!-- Article 2 -->
+        <article class="glass-card overflow-hidden group flex flex-col justify-between">
+          <div>
+            <div class="h-48 overflow-hidden bg-slate-200 dark:bg-slate-800">
+              <img src="https://images.unsplash.com/photo-1626785774625-ddcddc3445e9?w=800&q=80" alt="Graphic Design Principles" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy">
             </div>
             <div class="p-6">
-              <div class="flex items-center gap-3 mb-3">
-                <span class="text-xs bg-purple-500/10 text-purple-600 dark:text-purple-400 px-2.5 py-1 rounded-full">Design</span>
-                <span class="text-xs text-zinc-400">Feb 21, 2025</span>
+              <div class="flex items-center gap-2.5 text-xs text-slate-400 mb-3">
+                <span class="bg-purple-500/10 text-purple-600 dark:text-purple-400 px-2.5 py-0.5 rounded-full font-semibold">Graphic Design</span>
+                <span>•</span>
+                <span>Feb 21, 2025</span>
               </div>
-              <a href="blog-article.html">
-                <h3 class="font-display font-bold text-lg text-zinc-900 dark:text-white mb-2 group-hover:text-accent transition-colors">5 Graphic Design Principles That Make or Break Your Brand</h3>
-              </a>
-              <p class="text-sm text-zinc-500 dark:text-zinc-400 leading-relaxed mb-4">The fundamental design principles that separate amateur designs from professional-quality brand materials.</p>
-              <a href="blog-article.html" class="inline-flex items-center gap-1.5 text-sm font-medium text-accent nl">Read more →</a>
+              <h3 class="font-display font-bold text-lg text-slate-900 dark:text-white mb-2 group-hover:text-purple-500 transition-colors">
+                <a href="blog-article.html">5 Graphic Design Principles That Make or Break Your Brand</a>
+              </h3>
+              <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed mb-4">
+                The visual hierarchy, typography pairings, and whitespace rules that distinguish amateur flyers from commanding corporate identities.
+              </p>
             </div>
-          </article>
+          </div>
+          <div class="p-6 pt-2 border-t border-slate-100 dark:border-slate-800/80">
+            <a href="blog-article.html" class="text-xs font-semibold text-purple-600 dark:text-purple-400 hover:underline">Read Article &rarr;</a>
+          </div>
+        </article>
 
-          <article class="reveal d2 card-h group bg-white dark:bg-zinc-900 rounded-2xl overflow-hidden border border-zinc-100 dark:border-zinc-800 hover:border-accent">
-            <div class="pf w-full h-44">
-              <img src="https://images.unsplash.com/photo-1574717024653-61fd2cf4d44d?w=700&q=80" alt="Live streaming" loading="lazy"/>
+        <!-- Article 3 -->
+        <article class="glass-card overflow-hidden group flex flex-col justify-between">
+          <div>
+            <div class="h-48 overflow-hidden bg-slate-200 dark:bg-slate-800">
+              <img src="https://images.unsplash.com/photo-1574717024653-61fd2cf4d44d?w=800&q=80" alt="Live Streaming Setup" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy">
             </div>
             <div class="p-6">
-              <div class="flex items-center gap-3 mb-3">
-                <span class="text-xs bg-rose-500/10 text-rose-600 dark:text-rose-400 px-2.5 py-1 rounded-full">Media</span>
-                <span class="text-xs text-zinc-400">Jan 14, 2025</span>
+              <div class="flex items-center gap-2.5 text-xs text-slate-400 mb-3">
+                <span class="bg-crimson-500/10 text-crimson-600 dark:text-crimson-400 px-2.5 py-0.5 rounded-full font-semibold">Media Broadcast</span>
+                <span>•</span>
+                <span>Jan 14, 2025</span>
               </div>
-              <a href="blog-article.html">
-                <h3 class="font-display font-bold text-lg text-zinc-900 dark:text-white mb-2 group-hover:text-accent transition-colors">Setting Up Professional Live Streaming on a Budget</h3>
-              </a>
-              <p class="text-sm text-zinc-500 dark:text-zinc-400 leading-relaxed mb-4">A complete guide to broadcasting live events with professional quality without breaking the bank.</p>
-              <a href="blog-article.html" class="inline-flex items-center gap-1.5 text-sm font-medium text-accent nl">Read more →</a>
+              <h3 class="font-display font-bold text-lg text-slate-900 dark:text-white mb-2 group-hover:text-crimson-500 transition-colors">
+                <a href="blog-article.html">Setting Up Professional Live Streaming on a Budget</a>
+              </h3>
+              <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed mb-4">
+                How churches and community organizations can achieve broadcast-grade multi-camera switching with OBS Studio without thousands in budget.
+              </p>
             </div>
-          </article>
+          </div>
+          <div class="p-6 pt-2 border-t border-slate-100 dark:border-slate-800/80">
+            <a href="blog-article.html" class="text-xs font-semibold text-crimson-600 dark:text-crimson-400 hover:underline">Read Article &rarr;</a>
+          </div>
+        </article>
 
-          <article class="reveal d3 card-h group bg-white dark:bg-zinc-900 rounded-2xl overflow-hidden border border-zinc-100 dark:border-zinc-800 hover:border-accent">
-            <div class="pf w-full h-44">
-              <img src="https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?w=700&q=80" alt="Mobile apps" loading="lazy"/>
+        <!-- Article 4 -->
+        <article class="glass-card overflow-hidden group flex flex-col justify-between">
+          <div>
+            <div class="h-48 overflow-hidden bg-slate-200 dark:bg-slate-800">
+              <img src="https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?w=800&q=80" alt="Mobile Apps" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy">
             </div>
             <div class="p-6">
-              <div class="flex items-center gap-3 mb-3">
-                <span class="text-xs bg-amber-500/10 text-amber-600 dark:text-amber-400 px-2.5 py-1 rounded-full">Mobile</span>
-                <span class="text-xs text-zinc-400">Dec 3, 2024</span>
+              <div class="flex items-center gap-2.5 text-xs text-slate-400 mb-3">
+                <span class="bg-amber-500/10 text-amber-600 dark:text-amber-400 px-2.5 py-0.5 rounded-full font-semibold">Mobile Apps</span>
+                <span>•</span>
+                <span>Dec 3, 2024</span>
               </div>
-              <a href="blog-article.html">
-                <h3 class="font-display font-bold text-lg text-zinc-900 dark:text-white mb-2 group-hover:text-accent transition-colors">Building Your First Mobile App: A Beginner's Roadmap</h3>
-              </a>
-              <p class="text-sm text-zinc-500 dark:text-zinc-400 leading-relaxed mb-4">Everything you need to know before building your first mobile application — from planning to launch.</p>
-              <a href="blog-article.html" class="inline-flex items-center gap-1.5 text-sm font-medium text-accent nl">Read more →</a>
+              <h3 class="font-display font-bold text-lg text-slate-900 dark:text-white mb-2 group-hover:text-amber-500 transition-colors">
+                <a href="blog-article.html">Building Your First Mobile App: A Pragmatic Roadmap</a>
+              </h3>
+              <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed mb-4">
+                Avoiding common architectural pitfalls, deciding between native and responsive web apps, and prioritizing real user value over bloat.
+              </p>
             </div>
-          </article>
+          </div>
+          <div class="p-6 pt-2 border-t border-slate-100 dark:border-slate-800/80">
+            <a href="blog-article.html" class="text-xs font-semibold text-amber-600 dark:text-amber-400 hover:underline">Read Article &rarr;</a>
+          </div>
+        </article>
 
-          <article class="reveal d1 card-h group bg-white dark:bg-zinc-900 rounded-2xl overflow-hidden border border-zinc-100 dark:border-zinc-800 hover:border-accent">
-            <div class="pf w-full h-44">
-              <img src="https://images.unsplash.com/photo-1553867745-6e038d085e86?w=700&q=80" alt="Excel tips" loading="lazy"/>
+        <!-- Article 5 -->
+        <article class="glass-card overflow-hidden group flex flex-col justify-between">
+          <div>
+            <div class="h-48 overflow-hidden bg-slate-200 dark:bg-slate-800">
+              <img src="https://images.unsplash.com/photo-1553867745-6e038d085e86?w=800&q=80" alt="Excel Data Analysis" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy">
             </div>
             <div class="p-6">
-              <div class="flex items-center gap-3 mb-3">
-                <span class="text-xs bg-sky-500/10 text-sky-600 dark:text-sky-400 px-2.5 py-1 rounded-full">Productivity</span>
-                <span class="text-xs text-zinc-400">Nov 18, 2024</span>
+              <div class="flex items-center gap-2.5 text-xs text-slate-400 mb-3">
+                <span class="bg-sky-500/10 text-sky-600 dark:text-sky-400 px-2.5 py-0.5 rounded-full font-semibold">Data &amp; Office</span>
+                <span>•</span>
+                <span>Nov 18, 2024</span>
               </div>
-              <a href="blog-article.html">
-                <h3 class="font-display font-bold text-lg text-zinc-900 dark:text-white mb-2 group-hover:text-accent transition-colors">Advanced Excel Techniques Every Professional Should Know</h3>
-              </a>
-              <p class="text-sm text-zinc-500 dark:text-zinc-400 leading-relaxed mb-4">Power tips for data analysis, reporting, and presentation design that will transform your workflow.</p>
-              <a href="blog-article.html" class="inline-flex items-center gap-1.5 text-sm font-medium text-accent nl">Read more →</a>
+              <h3 class="font-display font-bold text-lg text-slate-900 dark:text-white mb-2 group-hover:text-sky-500 transition-colors">
+                <a href="blog-article.html">Advanced Excel &amp; Data Techniques Every Professional Needs</a>
+              </h3>
+              <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed mb-4">
+                Power formulas, pivot modeling, and Google Apps Script integrations that save hours of repetitive reporting every single week.
+              </p>
             </div>
-          </article>
+          </div>
+          <div class="p-6 pt-2 border-t border-slate-100 dark:border-slate-800/80">
+            <a href="blog-article.html" class="text-xs font-semibold text-sky-600 dark:text-sky-400 hover:underline">Read Article &rarr;</a>
+          </div>
+        </article>
 
-          <article class="reveal d2 card-h group bg-white dark:bg-zinc-900 rounded-2xl overflow-hidden border border-zinc-100 dark:border-zinc-800 hover:border-accent">
-            <div class="pf w-full h-44">
-              <img src="https://images.unsplash.com/photo-1551434678-e076c223a692?w=700&q=80" alt="Client management" loading="lazy"/>
+        <!-- Article 6 -->
+        <article class="glass-card overflow-hidden group flex flex-col justify-between">
+          <div>
+            <div class="h-48 overflow-hidden bg-slate-200 dark:bg-slate-800">
+              <img src="https://images.unsplash.com/photo-1551434678-e076c223a692?w=800&q=80" alt="Career Transition" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy">
             </div>
             <div class="p-6">
-              <div class="flex items-center gap-3 mb-3">
-                <span class="text-xs bg-accent/10 text-accent px-2.5 py-1 rounded-full">Business</span>
-                <span class="text-xs text-zinc-400">Oct 30, 2024</span>
+              <div class="flex items-center gap-2.5 text-xs text-slate-400 mb-3">
+                <span class="bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 px-2.5 py-0.5 rounded-full font-semibold">Career &amp; Tech</span>
+                <span>•</span>
+                <span>Oct 30, 2024</span>
               </div>
-              <a href="blog-article.html">
-                <h3 class="font-display font-bold text-lg text-zinc-900 dark:text-white mb-2 group-hover:text-accent transition-colors">From Teacher to Tech Pro: My Journey in Digital Skills</h3>
-              </a>
-              <p class="text-sm text-zinc-500 dark:text-zinc-400 leading-relaxed mb-4">How I transitioned from education to building digital solutions — and the lessons learned along the way.</p>
-              <a href="blog-article.html" class="inline-flex items-center gap-1.5 text-sm font-medium text-accent nl">Read more →</a>
+              <h3 class="font-display font-bold text-lg text-slate-900 dark:text-white mb-2 group-hover:text-emerald-500 transition-colors">
+                <a href="blog-article.html">From Classroom Teacher to Full-Stack Tech Consultant</a>
+              </h3>
+              <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed mb-4">
+                How my background in education became my greatest asset in building intuitive, high-adoption digital products for clients.
+              </p>
             </div>
-          </article>
+          </div>
+          <div class="p-6 pt-2 border-t border-slate-100 dark:border-slate-800/80">
+            <a href="blog-article.html" class="text-xs font-semibold text-emerald-600 dark:text-emerald-400 hover:underline">Read Article &rarr;</a>
+          </div>
+        </article>
 
-          <article class="reveal d3 card-h group bg-white dark:bg-zinc-900 rounded-2xl overflow-hidden border border-zinc-100 dark:border-zinc-800 hover:border-accent">
-            <div class="pf w-full h-44">
-              <img src="https://images.unsplash.com/photo-1561070791-2526d30994b5?w=700&q=80" alt="Branding" loading="lazy"/>
-            </div>
-            <div class="p-6">
-              <div class="flex items-center gap-3 mb-3">
-                <span class="text-xs bg-purple-500/10 text-purple-600 dark:text-purple-400 px-2.5 py-1 rounded-full">Design</span>
-                <span class="text-xs text-zinc-400">Oct 5, 2024</span>
-              </div>
-              <a href="blog-article.html">
-                <h3 class="font-display font-bold text-lg text-zinc-900 dark:text-white mb-2 group-hover:text-accent transition-colors">Church Branding Done Right: A Complete Design Guide</h3>
-              </a>
-              <p class="text-sm text-zinc-500 dark:text-zinc-400 leading-relaxed mb-4">How to create cohesive visual identities for churches — from logos to social media templates and event materials.</p>
-              <a href="blog-article.html" class="inline-flex items-center gap-1.5 text-sm font-medium text-accent nl">Read more →</a>
-            </div>
-          </article>
-
-        </div>
-
-        <!-- Pagination -->
-        <nav class="reveal flex items-center justify-center gap-2 mt-14" aria-label="Pagination">
-          <span class="w-9 h-9 flex items-center justify-center rounded-full bg-gradient-to-r from-accent to-purple-500 text-white text-sm font-medium">1</span>
-          <a href="#" class="w-9 h-9 flex items-center justify-center rounded-full border border-zinc-200 dark:border-zinc-700 text-zinc-600 dark:text-zinc-400 hover:border-accent hover:text-accent transition-colors text-sm">2</a>
-          <a href="#" class="w-9 h-9 flex items-center justify-center rounded-full border border-zinc-200 dark:border-zinc-700 text-zinc-600 dark:text-zinc-400 hover:border-accent hover:text-accent transition-colors text-sm">3</a>
-        </nav>
       </div>
     </section>
   </main>
 
-  <footer class="border-t border-zinc-100 dark:border-zinc-800">
-    <div class="max-w-6xl mx-auto px-6 py-8 flex flex-col sm:flex-row items-center justify-between gap-4">
-      <div class="flex items-center gap-2">
-        <div class="w-6 h-6 rounded-md bg-gradient-to-br from-accent to-purple-500 flex items-center justify-center">
-          <span class="text-white font-bold text-[10px]">JG</span>
-        </div>
-        <p class="text-sm text-zinc-400">© <span id="yr"></span> JGTECH. All rights reserved.</p>
+  <footer class="py-12 border-t border-slate-200/80 dark:border-slate-800/80 bg-white dark:bg-obsidian-950">
+    <div class="max-w-7xl mx-auto px-6 flex flex-col md:flex-row items-center justify-between gap-6">
+      <div class="flex items-center gap-3">
+        <span class="font-display font-bold text-slate-900 dark:text-white">JG<span class="text-brand-500">TECH</span></span>
+        <span class="text-xs text-slate-500 dark:text-slate-400">© 2026. All rights reserved.</span>
       </div>
-      <p class="text-xs text-zinc-500">Built with <a href="https://tailwindcss.com" class="hover:text-accent transition-colors">Tailwind CSS</a> & <a href="https://alpinejs.dev" class="hover:text-accent transition-colors">Alpine.js</a></p>
+      <div class="flex items-center gap-6 text-xs text-slate-500 dark:text-slate-400">
+        <a href="index.html" class="hover:text-brand-500">Home</a>
+        <a href="projects.html" class="hover:text-brand-500">All Projects</a>
+        <a href="case-study.html" class="hover:text-brand-500">School Case Study</a>
+        <a href="index.html#contact" class="hover:text-brand-500">Contact</a>
+      </div>
     </div>
   </footer>
 
   <script>
-    document.getElementById('yr').textContent = new Date().getFullYear();
-    const observer = new IntersectionObserver(entries => {
-      entries.forEach(e => { if(e.isIntersecting){e.target.classList.add('visible');observer.unobserve(e.target);} });
-    },{threshold:.1,rootMargin:'0px 0px -40px 0px'});
-    document.querySelectorAll('.reveal').forEach(el=>observer.observe(el));
+    function blogPage() {
+      return {
+        dark: document.documentElement.classList.contains('dark'),
+        scrolled: false,
+        mobileMenu: false,
+
+        init() {
+          window.addEventListener('scroll', () => {
+            this.scrolled = window.scrollY > 20;
+          }, { passive: true });
+        },
+
+        toggleTheme() {
+          this.dark = !this.dark;
+          if (this.dark) {
+            document.documentElement.classList.add('dark');
+            localStorage.setItem('theme', 'dark');
+          } else {
+            document.documentElement.classList.remove('dark');
+            localStorage.setItem('theme', 'light');
+          }
+        }
+      }
+    }
   </script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a09525fc3af60338',t:'MTc4MTA2MDY2Mw=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script><script defer src="https://static.cloudflareinsights.com/beacon.min.js/v833ccba57c9e4d2798f2e76cebdd09a11778172276447" integrity="sha512-57MDmcccJXYtNnH+ZiBwzC4jb2rvgVCEokYN+L/nLlmO8rfYT/gIpW2A569iJ/3b+0UEasghjuZH/ma3wIs/EQ==" data-cf-beacon='{"version":"2024.11.0","token":"1954b47c125f43f8b4338b3c4f804e4f","server_timing":{"name":{"cfCacheStatus":true,"cfEdge":true,"cfExtPri":true,"cfL4":true,"cfOrigin":true,"cfSpeedBrain":true},"location_startswith":null}}' crossorigin="anonymous"></script>
 </body>
 </html>
