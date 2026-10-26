@@ -262,23 +262,46 @@
             gap: 8px;
             padding: 8px 18px;
             border-radius: 9999px;
-            background: rgba(239, 68, 68, 0.14);
+            background: rgba(239, 68, 68, 0.16);
             backdrop-filter: blur(14px);
             -webkit-backdrop-filter: blur(14px);
-            border: 1px solid rgba(239, 68, 68, 0.35);
+            border: 1px solid rgba(239, 68, 68, 0.4);
             color: #f87171;
             font-family: 'Inter', sans-serif;
             font-size: 0.82rem;
             font-weight: 700;
             cursor: pointer;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
-            transition: all 0.25s ease;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+            transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+        }
+        .btn-close-chat.active {
+            display: inline-flex !important;
+            opacity: 1 !important;
+            visibility: visible !important;
+            pointer-events: auto !important;
+        }
+        body:not(.dark) .btn-close-chat {
+            background: rgba(254, 242, 242, 0.95);
+            border-color: rgba(239, 68, 68, 0.35);
+            color: #dc2626;
+            box-shadow: 0 4px 15px rgba(220, 38, 38, 0.12);
         }
         .btn-close-chat:hover {
-            background: rgba(239, 68, 68, 0.25);
+            background: rgba(239, 68, 68, 0.28);
             border-color: #ef4444;
-            color: #fca5a5;
+            color: #ffffff;
             transform: translateY(-2px);
+            box-shadow: 0 6px 25px rgba(239, 68, 68, 0.45);
+        }
+        .btn-close-chat i {
+            font-size: 0.85rem;
+            transition: transform 0.25s ease;
+        }
+        .btn-close-chat:hover i {
+            transform: translateX(-3px);
         }
 
         /* Chat Footer Z-Index Priority & Sleek Input Container */
@@ -370,10 +393,16 @@
                 padding: 7px 11px !important;
             }
             .btn-close-chat {
-                padding: 6px 12px;
-                font-size: 0.75rem;
-                left: 15px;
-                top: 15px;
+                position: fixed !important;
+                top: 15px !important;
+                left: 14px !important;
+                padding: 7px 14px !important;
+                font-size: 0.78rem !important;
+                gap: 6px !important;
+                z-index: 1000 !important;
+            }
+            .btn-close-chat.active {
+                display: inline-flex !important;
             }
         }
         @media (max-width: 380px) {
@@ -381,11 +410,11 @@
                 padding: 5px 10px !important;
                 font-size: 0.76rem !important;
                 top: 12px !important;
-                left: 12px !important;
+                left: 10px !important;
             }
             .top-nav-actions {
                 top: 12px !important;
-                right: 12px !important;
+                right: 10px !important;
                 gap: 6px !important;
             }
             .top-nav-actions .classic-portal-badge {
@@ -393,9 +422,12 @@
             }
             .btn-close-chat {
                 top: 12px !important;
-                left: 12px !important;
-                padding: 5px 10px !important;
+                left: 10px !important;
+                padding: 6px 11px !important;
                 font-size: 0.72rem !important;
+            }
+            .btn-close-chat.active {
+                display: inline-flex !important;
             }
         }
     </style>
@@ -988,7 +1020,10 @@
             }
 
             // Reset controls
-            if (closeBtn) closeBtn.classList.remove('active');
+            if (closeBtn) {
+                closeBtn.classList.remove('active');
+                closeBtn.style.display = 'none';
+            }
             if (brandBadge) brandBadge.style.display = 'inline-flex';
         };
 
@@ -1001,22 +1036,42 @@
 
             if (intro) {
                 const updateControls = () => {
-                    const isChatting = intro.classList.contains('fade-out') || intro.style.display === 'none';
+                    const hasMessages = chatWin && chatWin.querySelectorAll('.message-row, .ai-message').length > 0;
+                    const isChatting = intro.classList.contains('fade-out') || intro.style.display === 'none' || hasMessages;
                     if (isChatting) {
                         if (chatWin) chatWin.style.display = 'flex';
-                        if (closeBtn) closeBtn.classList.add('active');
-                        if (brandBadge && window.innerWidth < 768) {
+                        if (closeBtn) {
+                            closeBtn.classList.add('active');
+                            closeBtn.style.display = 'inline-flex';
+                        }
+                        if (brandBadge) {
                             brandBadge.style.display = 'none';
                         }
                     } else {
-                        if (chatWin) chatWin.style.display = 'none';
-                        if (closeBtn) closeBtn.classList.remove('active');
+                        if (chatWin && !hasMessages) chatWin.style.display = 'none';
+                        if (closeBtn) {
+                            closeBtn.classList.remove('active');
+                            closeBtn.style.display = 'none';
+                        }
                         if (brandBadge) brandBadge.style.display = 'inline-flex';
                     }
                 };
+
                 const observer = new MutationObserver(updateControls);
                 observer.observe(intro, { attributes: true, attributeFilter: ['class', 'style'] });
+                if (chatWin) {
+                    observer.observe(chatWin, { childList: true, subtree: true });
+                }
                 updateControls();
+
+                // Periodic check and click listener to immediately catch user option clicks
+                document.addEventListener('click', (e) => {
+                    if (e.target.closest('#intro-options-target, .btn-primary, .send-btn, .primary-nav')) {
+                        setTimeout(updateControls, 40);
+                        setTimeout(updateControls, 200);
+                        setTimeout(updateControls, 600);
+                    }
+                });
             }
         });
 

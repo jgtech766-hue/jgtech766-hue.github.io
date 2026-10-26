@@ -2446,6 +2446,7 @@ body:not(.dark) .btn-close-chat {
 }
 
 .btn-close-chat.active {
+    display: inline-flex !important;
     opacity: 1;
     visibility: visible;
     transform: translateY(0);
