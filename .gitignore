@@ -15,3 +15,4 @@ yarn-error.log*
 .env.local
 *.log
 scratch/
+*-orig.png

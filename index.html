@@ -12,10 +12,10 @@
     <meta property="og:description" content="Explore JGTECH's interactive AI ChatFolio with live project demos, client reviews, and direct WhatsApp contact.">
     <meta property="og:type" content="website">
 
-    <!-- Curated Google Fonts -->
+    <!-- Curated Google Fonts (Optimized for High Velocity) -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Geist:wght@100..900&family=Unbounded:wght@200..900&family=Inter:wght@300;400;500;600;700;800&family=Montserrat:wght@400;500;600;700;800;900&family=Playfair+Display:ital,wght@0,600;0,700;1,400;1,600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Montserrat:wght@700;800&family=Unbounded:wght@700;800;900&display=swap" rel="stylesheet">
 
     <!-- FontAwesome 6 Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
@@ -896,17 +896,18 @@
             function hidePreloader() {
                 const p = document.getElementById('preloader');
                 if (p && p.style.display !== 'none') {
-                    p.style.transition = 'opacity 0.3s ease';
+                    p.style.transition = 'opacity 0.2s ease';
                     p.style.opacity = '0';
                     p.style.pointerEvents = 'none';
-                    setTimeout(() => { if (p) p.style.display = 'none'; }, 300);
+                    setTimeout(() => { if (p) p.style.display = 'none'; }, 200);
                 }
             }
-            if (document.readyState === 'complete') {
+            if (document.readyState === 'interactive' || document.readyState === 'complete') {
                 hidePreloader();
             } else {
+                document.addEventListener('DOMContentLoaded', hidePreloader);
                 window.addEventListener('load', hidePreloader);
-                setTimeout(hidePreloader, 600); // Max 600ms load delay
+                setTimeout(hidePreloader, 250); // Instant 250ms ceiling
             }
         })();
 
