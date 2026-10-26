@@ -23,14 +23,39 @@
     <!-- ChatFolio Core & Skin Stylesheets -->
     <link href="chatfolio.css" rel="stylesheet">
 
+    <!-- Critical Asset Preloading for Instant High-Velocity Loading -->
+    <link rel="preload" as="image" href="photo-circle.png">
+    <link rel="dns-prefetch" href="https://fonts.googleapis.com">
+    <link rel="dns-prefetch" href="https://cdnjs.cloudflare.com">
+
     <style>
+        /* Modern High-Performance Scrollbar System */
+        * {
+            scrollbar-width: thin;
+            scrollbar-color: rgba(16, 185, 129, 0.3) transparent;
+        }
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: rgba(16, 185, 129, 0.28);
+            border-radius: 9999px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(16, 185, 129, 0.65);
+        }
+
         /* Top Spacing & Layout Matching Reference Image */
         .intro-screen {
             justify-content: flex-start !important;
-            padding-top: clamp(40px, 6.5vh, 70px) !important;
-            padding-bottom: 160px !important;
+            padding-top: clamp(24px, 4vh, 44px) !important;
+            padding-bottom: clamp(170px, 20vh, 215px) !important;
             overflow-y: auto !important;
-            z-index: 50 !important;
+            z-index: 20 !important;
             background: #0f1117 !important;
         }
         body.dark .intro-screen {
@@ -53,7 +78,7 @@
             display: none !important;
         }
         .intro-screen .hello {
-            margin: 0 auto 14px auto !important;
+            margin: 0 auto 10px auto !important;
             transform: none !important;
             position: relative;
             display: inline-block;
@@ -138,17 +163,18 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            height: min(290px, 32vw, calc(100vh - 430px));
-            min-height: 200px;
-            max-height: 320px;
-            width: 38%;
+            height: min(250px, 28vw, calc(100vh - 460px)) !important;
+            min-height: 180px !important;
+            max-height: 280px !important;
+            width: 38% !important;
+            margin: 0 auto;
         }
         .intro-screen .intro-image {
-            width: min(280px, 30vw, calc(100vh - 440px));
-            height: min(280px, 30vw, calc(100vh - 440px));
-            object-fit: cover;
-            border-radius: 50%;
-            z-index: 3;
+            width: min(235px, 26vw, calc(100vh - 470px)) !important;
+            height: min(235px, 26vw, calc(100vh - 470px)) !important;
+            object-fit: cover !important;
+            border-radius: 50% !important;
+            z-index: 3 !important;
             position: relative;
             filter: drop-shadow(0 15px 35px rgba(0, 0, 0, 0.5));
             transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), filter 0.4s ease;
@@ -158,9 +184,9 @@
             filter: drop-shadow(0 20px 45px rgba(11, 163, 80, 0.45));
         }
         .intro-screen .rounded-animation {
-            width: min(320px, 34vw, calc(100vh - 400px));
-            height: min(320px, 34vw, calc(100vh - 400px));
-            z-index: 1;
+            width: min(270px, 30vw, calc(100vh - 440px)) !important;
+            height: min(270px, 30vw, calc(100vh - 440px)) !important;
+            z-index: 1 !important;
             position: absolute;
             left: 0;
             right: 0;
@@ -173,6 +199,124 @@
             filter: blur(14px);
             animation: morph 8s ease-in-out infinite 1s;
             pointer-events: none;
+        }
+
+        /* Top Right Coordinated Action Cluster (Zero Overlap Guaranteed) */
+        .top-nav-actions {
+            position: fixed;
+            top: 22px;
+            right: 24px;
+            z-index: 1000;
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .top-nav-actions .classic-portal-badge {
+            position: static !important;
+            top: auto !important;
+            right: auto !important;
+            margin: 0 !important;
+            flex-shrink: 0 !important;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 18px;
+            border-radius: 9999px;
+            background: rgba(16, 185, 129, 0.12);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(16, 185, 129, 0.35);
+            color: #10b981;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.82rem;
+            font-weight: 700;
+            text-decoration: none;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .top-nav-actions .classic-portal-badge:hover {
+            background: rgba(16, 185, 129, 0.25);
+            border-color: #10b981;
+            color: #34d399;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(16, 185, 129, 0.4);
+        }
+        .top-nav-actions .skin {
+            position: static !important;
+            top: auto !important;
+            right: auto !important;
+            left: auto !important;
+            bottom: auto !important;
+            margin: 0 !important;
+            flex-shrink: 0 !important;
+        }
+
+        /* Floating Close Chat Button */
+        .btn-close-chat {
+            position: fixed;
+            top: 25px;
+            left: 25px;
+            z-index: 1000;
+            display: none;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 18px;
+            border-radius: 9999px;
+            background: rgba(239, 68, 68, 0.14);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+            border: 1px solid rgba(239, 68, 68, 0.35);
+            color: #f87171;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.82rem;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
+            transition: all 0.25s ease;
+        }
+        .btn-close-chat:hover {
+            background: rgba(239, 68, 68, 0.25);
+            border-color: #ef4444;
+            color: #fca5a5;
+            transform: translateY(-2px);
+        }
+
+        /* Chat Footer Z-Index Priority & Sleek Input Container */
+        .chat-footer {
+            z-index: 950 !important;
+            pointer-events: auto !important;
+            background: transparent !important;
+        }
+        body.dark .chat-footer::before {
+            display: none !important;
+        }
+        .chat-footer .input-nav-wrapper {
+            position: relative;
+            z-index: 951 !important;
+            background: rgba(18, 22, 34, 0.94) !important;
+            backdrop-filter: blur(18px) !important;
+            -webkit-backdrop-filter: blur(18px) !important;
+            border: 1px solid rgba(255, 255, 255, 0.08) !important;
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5) !important;
+        }
+        body:not(.dark) .chat-footer .input-nav-wrapper {
+            background: rgba(255, 255, 255, 0.96) !important;
+            border-color: rgba(0, 0, 0, 0.08) !important;
+            box-shadow: 0 12px 35px rgba(0, 0, 0, 0.12) !important;
+        }
+        .chat-footer .input-area-visual {
+            position: relative;
+            z-index: 952 !important;
+        }
+        .chat-footer .input-area-visual .send-btn {
+            background: linear-gradient(135deg, #10b981, #059669) !important;
+            box-shadow: 0 0 15px rgba(16, 185, 129, 0.4) !important;
+            opacity: 1 !important;
+            z-index: 955 !important;
+        }
+        .chat-footer .input-area-visual .send-btn:disabled {
+            opacity: 0.5 !important;
+            box-shadow: none !important;
         }
 
         /* Quote Styling */
@@ -193,7 +337,7 @@
             font-size: 0.95rem;
         }
 
-        /* Responsive adjustments */
+        /* Responsive Breakpoints & Device Adaptations */
         @media (max-width: 900px) {
             .brand-badge-float {
                 padding: 6px 14px;
@@ -205,7 +349,31 @@
                 display: none;
             }
             .intro-screen .image-container {
-                width: 50%;
+                width: 50% !important;
+            }
+            .top-nav-actions {
+                top: 18px;
+                right: 18px;
+                gap: 8px;
+            }
+        }
+        @media (max-width: 640px) {
+            .top-nav-actions {
+                top: 15px;
+                right: 15px;
+                gap: 8px;
+            }
+            .top-nav-actions .classic-portal-badge span {
+                display: none;
+            }
+            .top-nav-actions .classic-portal-badge {
+                padding: 7px 11px !important;
+            }
+            .btn-close-chat {
+                padding: 6px 12px;
+                font-size: 0.75rem;
+                left: 15px;
+                top: 15px;
             }
         }
     </style>
@@ -228,12 +396,21 @@
         <span>Close Chat</span>
     </button>
 
-    <!-- Floating Classic Portfolio Portal (Top Right) -->
-    <a href="classic.html" id="classic-portal-badge" class="classic-portal-badge" title="Go to Multi-Section Classic Portfolio">
-        <i class="fa-solid fa-layer-group"></i>
-        <span>Classic Website</span>
-        <i class="fa-solid fa-arrow-up-right-from-square" style="font-size: 0.72rem; opacity: 0.85;"></i>
-    </a>
+    <!-- Floating Header Action Bar (Top Right: Coordinated Zero-Overlap) -->
+    <div class="top-nav-actions" id="top-nav-actions">
+        <a href="classic.html" id="classic-portal-badge" class="classic-portal-badge" title="Go to Multi-Section Classic Portfolio">
+            <i class="fa-solid fa-layer-group"></i>
+            <span>Classic Website</span>
+            <i class="fa-solid fa-arrow-up-right-from-square" style="font-size: 0.72rem; opacity: 0.85;"></i>
+        </a>
+        <div class="skin">
+            <input checked type="checkbox" class="checkbox" id="checkbox" aria-label="Toggle Light/Dark Theme">
+            <label for="checkbox" class="checkbox-label" title="Toggle Light/Dark Theme">
+                <svg class="sun" width="20px" height="20px" stroke-width="1.5" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" color="#000000"><path d="M12 18C15.3137 18 18 15.3137 18 12C18 8.68629 15.3137 6 12 6C8.68629 6 6 8.68629 6 12C6 15.3137 8.68629 18 12 18Z" stroke="#333" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path><path d="M22 12L23 12" stroke="#000000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path><path d="M12 2V1" stroke="#333" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path><path d="M12 23V22" stroke="#000000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path><path d="M20 20L19 19" stroke="#000000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path><path d="M20 4L19 5" stroke="#000000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path><path d="M4 20L5 19" stroke="#000000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path><path d="M4 4L5 5" stroke="#000000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path><path d="M1 12L2 12" stroke="#000000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+                <svg class="moon" width="20px" height="20px" stroke-width="1.5" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" color="#000000"><path d="M3 11.5066C3 16.7497 7.25034 21 12.4934 21C16.2209 21 19.4466 18.8518 21 15.7259C12.4934 15.7259 8.27411 11.5066 8.27411 3C5.14821 4.55344 3 7.77915 3 11.5066Z" stroke="#f1f5f9" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+            </label>
+        </div>
+    </div>
 
     <!-- Chat Wrapper Starts -->
     <main class="chat-wrapper" id="chat-wrapper">
@@ -697,15 +874,7 @@
     </div>
     <!-- Page Preloader Ends -->
 
-    <!-- Light/Dark Switcher Starts -->
-    <div class="skin">
-        <input checked type="checkbox" class="checkbox" id="checkbox" aria-label="Toggle Light/Dark Theme">
-        <label for="checkbox" class="checkbox-label" title="Toggle Light/Dark Theme">
-            <svg class="sun" width="20px" height="20px" stroke-width="1.5" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" color="#000000"><path d="M12 18C15.3137 18 18 15.3137 18 12C18 8.68629 15.3137 6 12 6C8.68629 6 6 8.68629 6 12C6 15.3137 8.68629 18 12 18Z" stroke="#333" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path><path d="M22 12L23 12" stroke="#000000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path><path d="M12 2V1" stroke="#333" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path><path d="M12 23V22" stroke="#000000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path><path d="M20 20L19 19" stroke="#000000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path><path d="M20 4L19 5" stroke="#000000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path><path d="M4 20L5 19" stroke="#000000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path><path d="M4 4L5 5" stroke="#000000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path><path d="M1 12L2 12" stroke="#000000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path></svg>
-            <svg class="moon" width="20px" height="20px" stroke-width="1.5" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" color="#000000"><path d="M3 11.5066C3 16.7497 7.25034 21 12.4934 21C16.2209 21 19.4466 18.8518 21 15.7259C12.4934 15.7259 8.27411 11.5066 8.27411 3C5.14821 4.55344 3 7.77915 3 11.5066Z" stroke="#f1f5f9" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path></svg>
-        </label>
-    </div>
-    <!-- Light/Dark Switcher Ends -->
+
 
     <!-- Master Modal Starts -->
     <div id="master-modal" class="modal-overlay">
@@ -722,6 +891,25 @@
     <script src="app.js"></script>
 
     <script>
+        // 0. Ultra-Fast Preloader Dismiss Failsafe (Instant Load Experience)
+        (function() {
+            function hidePreloader() {
+                const p = document.getElementById('preloader');
+                if (p && p.style.display !== 'none') {
+                    p.style.transition = 'opacity 0.3s ease';
+                    p.style.opacity = '0';
+                    p.style.pointerEvents = 'none';
+                    setTimeout(() => { if (p) p.style.display = 'none'; }, 300);
+                }
+            }
+            if (document.readyState === 'complete') {
+                hidePreloader();
+            } else {
+                window.addEventListener('load', hidePreloader);
+                setTimeout(hidePreloader, 600); // Max 600ms load delay
+            }
+        })();
+
         // 1. Modal helper safeguard
         window.closeMasterModal = function() {
             const modal = document.getElementById('master-modal');

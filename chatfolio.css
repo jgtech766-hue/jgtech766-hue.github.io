@@ -460,16 +460,15 @@ body.dark .modal-overlay {
     display: flex;
     flex-direction: column;
     justify-content: flex-end;
-    position: relative;
-    z-index: 6;
     position: fixed;
+    z-index: 950;
     left: 0;
     right: 0;
     margin: 0 auto;
     bottom: 0;
     max-width: 900px;
     width: 100%;
-    background-color:#fff;
+    background-color: transparent;
 }
 
 .chat-footer::before {
@@ -2470,12 +2469,40 @@ body:not(.dark) .btn-close-chat {
     transform: translateX(-3px);
 }
 
+/* Coordinated Top Action Bar */
+.top-nav-actions {
+    position: fixed;
+    top: 22px;
+    right: 24px;
+    z-index: 1000;
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.top-nav-actions .classic-portal-badge {
+    position: static;
+    top: auto;
+    right: auto;
+    z-index: auto;
+    margin: 0;
+    flex-shrink: 0;
+}
+
+.top-nav-actions .skin {
+    position: static;
+    top: auto;
+    right: auto;
+    left: auto;
+    bottom: auto;
+    z-index: auto;
+    margin: 0;
+    flex-shrink: 0;
+}
+
 /* Classic Portfolio Badge */
 .classic-portal-badge {
-    position: fixed;
-    top: 25px;
-    right: 85px;
-    z-index: 100;
+    position: static;
     display: inline-flex;
     align-items: center;
     gap: 8px;
@@ -2508,16 +2535,21 @@ body:not(.dark) .classic-portal-badge {
 }
 
 @media (max-width: 640px) {
-    .classic-portal-badge {
-        padding: 6px 12px;
-        font-size: 0.75rem;
-        right: 75px;
-        top: 20px;
+    .top-nav-actions {
+        top: 15px;
+        right: 15px;
+        gap: 8px;
+    }
+    .top-nav-actions .classic-portal-badge span {
+        display: none;
+    }
+    .top-nav-actions .classic-portal-badge {
+        padding: 7px 11px;
     }
     .btn-close-chat {
         padding: 6px 12px;
         font-size: 0.75rem;
         left: 15px;
-        top: 20px;
+        top: 15px;
     }
 }

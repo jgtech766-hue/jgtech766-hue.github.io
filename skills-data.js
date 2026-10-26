@@ -280,15 +280,24 @@
                 'Cloud, DevOps & Tools': { bg: 'bg-amber-500/10 dark:bg-amber-500/20', text: 'text-amber-600 dark:text-amber-400', border: 'border-amber-500/20' }
             };
 
+            const categorySVGs = {
+                'Frontend Architecture': `<svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"/></svg>`,
+                'Backend & Cloud': `<svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14M5 12a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v4a2 2 0 01-2 2M5 12a2 2 0 00-2 2v4a2 2 0 002 2h14a2 2 0 002-2v-4a2 2 0 00-2-2m-2-4h.01M17 16h.01"/></svg>`,
+                'Databases & Architecture': `<svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4m0 5c0 2.21-3.582 4-8 4s-8-1.79-8-4"/></svg>`,
+                'Cloud, DevOps & Tools': `<svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M3 15a4 4 0 004 4h9a5 5 0 10-.1-9.999 5.002 5.002 0 00-9.78 2.096A4.001 4.001 0 003 15z"/></svg>`
+            };
+            const defaultSVG = `<svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>`;
+
             let gridHtml = '';
 
             for (const [catName, skillList] of Object.entries(categories)) {
                 const colors = categoryColors[catName] || { bg: 'bg-brand-500/10 dark:bg-brand-500/20', text: 'text-brand-600 dark:text-brand-400', border: 'border-brand-500/20' };
+                const iconSvg = categorySVGs[catName] || defaultSVG;
 
                 gridHtml += `
                     <div class="glass-card p-6">
                         <div class="w-10 h-10 rounded-xl ${colors.bg} ${colors.text} flex items-center justify-center mb-4 border ${colors.border}">
-                            <i class="${skillList[0]?.icon || 'fa-solid fa-code'} text-lg"></i>
+                            ${iconSvg}
                         </div>
                         <h3 class="font-display font-bold text-lg text-slate-900 dark:text-white mb-3">${catName}</h3>
                         <ul class="space-y-2.5 text-xs sm:text-sm text-slate-600 dark:text-slate-300">
