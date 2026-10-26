@@ -80,6 +80,8 @@ html {
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  max-width: 100vw;
+  overflow-x: hidden;
 }
 
 body {
@@ -88,8 +90,14 @@ body {
   min-height: 100vh;
   line-height: 1.6;
   position: relative;
+  max-width: 100vw;
   overflow-x: hidden;
   transition: background-color var(--transition-smooth), color var(--transition-smooth);
+}
+
+img, svg, video, canvas {
+  max-width: 100%;
+  height: auto;
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -1008,4 +1016,69 @@ body::before {
   right: 28px;
   transform: translateY(-50%) rotate(90deg);
   transform-origin: center center;
+}
+
+/* ==========================================================================
+   CROSS-DEVICE RESPONSIVENESS & MOBILE-FIRST POLISH
+   Guaranteed flawless rendering on Mobile (320px-480px), Tablet (768px-1024px), Desktop
+   ========================================================================== */
+
+/* Ambient Glow Containment on Mobile */
+@media (max-width: 768px) {
+  .ambient-glow-indigo,
+  .ambient-glow-crimson,
+  .ambient-glow-purple {
+    max-width: 90vw !important;
+    max-height: 90vw !important;
+    opacity: 0.25 !important;
+    filter: blur(50px) !important;
+  }
+}
+
+/* Glass Card Mobile Polish */
+@media (max-width: 640px) {
+  .glass-card {
+    padding: 1.25rem !important;
+    border-radius: var(--radius-md) !important;
+  }
+  
+  .tech-pill {
+    font-size: 0.7rem !important;
+    padding: 0.25rem 0.55rem !important;
+  }
+}
+
+/* ChatFolio Mobile Viewport Optimization */
+@media (max-width: 640px) {
+  .chatfolio-area-content {
+    padding-top: 68px !important;
+    padding-bottom: 140px !important;
+    padding-left: 14px !important;
+    padding-right: 14px !important;
+  }
+  
+  .chat-footer {
+    padding: 8px 12px 14px !important;
+  }
+  
+  .chat-footer .input-nav-wrapper {
+    border-radius: 18px !important;
+  }
+}
+
+/* Touch Device Target Sizing & Tap Polish */
+@media (hover: none) and (pointer: coarse) {
+  button, 
+  a, 
+  input, 
+  select, 
+  textarea {
+    touch-action: manipulation;
+  }
+  
+  .shimmer-btn,
+  .btn-primary,
+  .chatfolio-send-btn {
+    min-height: 44px;
+  }
 }
